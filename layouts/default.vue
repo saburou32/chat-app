@@ -39,7 +39,8 @@
 </template>
 
 <script>
-import { db, firebase } from '~/pliugins/firebase'
+import { db, firebase } from '~/plugins/firebase'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -51,6 +52,8 @@ export default {
     isAuthenticated: true,
   }),
   methods: {
+    ...mapActions(['setUser']),
+
     // ログインメソッド、firebaseの認証
     login() {
       const provider = new firebase.auth.GoogleAuthProvider()
@@ -61,6 +64,21 @@ export default {
           window.alert(error)
         })
     }
+  },
+  mounted() {
+    // ログインしたあと、ログインしたユーザー情報からusersコレクションを作成する
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user) {
+        this.setUser(user)
+        db.collection('users').doc(user.uid).set({
+          userId: user.uid,
+          displayName: user.displayName,
+          userIcon: user.photoURL,
+          createdAt: new Date().getTime(),
+          updateAt: new Date().getTime()
+        })
+      }
+    })
   }
 }
 </script>

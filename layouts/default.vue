@@ -28,7 +28,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>チャンネル名</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn outlined v-if="isAuthenticated">ログイン</v-btn>
+      <v-btn outlined v-if="isAuthenticated" @click="login">ログイン</v-btn>
       <v-btn outlined v-else>ログアウト</v-btn>
     </v-app-bar>
 
@@ -39,17 +39,28 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      source: String,
-    },
-    data: () => ({
-      drawer: null,
-      channels: [
-        'チャンネル1',
-        'チャンネル2'
-      ],
-      isAuthenticated: true,
-    }),
+import { db, firebase } from '~/pliugins/firebase'
+
+export default {
+  props: {
+    source: String,
+  },
+  data: () => ({
+    drawer: null,
+    channels: [],
+    isAuthenticated: true,
+  }),
+  methods: {
+    // ログインメソッド、firebaseの認証
+    login() {
+      const provider = new firebase.auth.GoogleAuthProvider()
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          this.setUser(result.user)
+        }).catch((error) => {
+          window.alert(error)
+        })
+    }
   }
+}
 </script>

@@ -2,7 +2,8 @@
   <v-row>
     <v-col cols="auto pb-0" height="auto">
       <v-img
-        :src="`https://pbs.twimg.com/profile_images/1131882065337602049/0JRUGd3S_400x400.jpg`"
+        :src="currentUser.photoURL"
+        v-if="isAuthenticated"
         width="12vw"
         height="12vw"
         max-width="50px"
@@ -12,24 +13,51 @@
       </v-img>
     </v-col>
     <v-col height="auto" class="pb-0">
-      <v-textarea outlined auto-grow rows="1" v-model="text" v-if="isAuthenticated"></v-textarea>
-      <v-textarea outlined auto-grow rows="1" v-model="text" v-else></v-textarea>
+      <v-textarea
+        outlined
+        auto-grow
+        rows="1"
+        v-model="text"
+        :disabled="!isAuthenticated"
+        @keydown.exact.ctrl.enter="addMessage"
+      >
+      </v-textarea>
       <v-row>
-        <v-btn block>send</v-btn>
+        <v-btn block @click="addMessage">send</v-btn>
       </v-row>
     </v-col>
   </v-row>
 </template>
 
 <script>
+import { db, firebase } from '~/plugins/firebase'
+
 export default {
   data: () => ({
-    isAuthenticated: true,
-    text: '',
-  })
+    text: null,
+  }),
+
+  computed: {
+    currentUser() {
+      return this.$store.state.user
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated
+    }
+  },
+
+  methods: {
+    // メッセージ保存
+    async addMessage() {
+      const channelId = this.$route.params.id
+      await db.collection('channels').doc(channelId).collection('messages').add({
+        text: this.text,
+        createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime(),
+        userId: this.currentUser.uid
+      })
+      this.text = null
+    }
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

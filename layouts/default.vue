@@ -14,25 +14,34 @@
         </v-list-item>
         <v-divider></v-divider>
       </v-container>
-      <v-list dense nav>
-        <!-- <v-subheader class="pl-4" short>チャンネル一覧</v-subheader> -->
-        <v-list-item link v-for="(channel, index) in channels" :key="index">
+      <v-list nav>
+        <v-list-item link to="/">
+          Home
+        </v-list-item>
+        <v-list-item
+          link
+          nuxt
+          :to="`/channels/${ channel.id }`"
+          v-for="channel in channels" :key="channel.name"
+        >
           <v-list-item-content>
-            <v-list-item-title>{{ channel }}</v-list-item-title>
+            <v-list-item-title>
+              {{ channel.name }}
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app color="primary" dark ref="header">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>チャンネル名</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn outlined v-if="isAuthenticated" @click="login">ログイン</v-btn>
-      <v-btn outlined v-else>ログアウト</v-btn>
+      <v-btn outlined v-if="!isAuthenticated" @click="login">ログイン</v-btn>
+      <v-btn outlined v-else @click="logout">ログアウト</v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="main-container">
       <nuxt />
     </v-main>
   </v-app>
@@ -49,12 +58,12 @@ export default {
   data: () => ({
     drawer: null,
     channels: [],
-    isAuthenticated: true,
   }),
+
   methods: {
     ...mapActions(['setUser']),
 
-    // ログインメソッド、firebaseの認証
+    // ログイン、firebaseの認証
     login() {
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(provider)
@@ -63,10 +72,28 @@ export default {
         }).catch((error) => {
           window.alert(error)
         })
+    },
+
+    // ログアウト、firebaseの機能
+    logout() {
+      firebase.auth().signOut()
+        .then(() => {
+          this.setUser(null)
+        }).catch((error) => {
+          window.alert(error)
+        })
     }
   },
-  mounted() {
-    // ログインしたあと、ログインしたユーザー情報からusersコレクションを作成する
+
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated
+    }
+  },
+
+  async mounted() {
+    // 認証状態が変化した時、ログインしたユーザー情報からusersコレクションを作成する
+    // また、認証状態を保持する
     firebase.auth().onAuthStateChanged((user) => {
       if(user) {
         this.setUser(user)
@@ -79,6 +106,17 @@ export default {
         })
       }
     })
+    // チャンネル取得
+    const snapshot = await db.collection('channels').get()
+    snapshot.forEach((doc) => {
+      this.channels.push({ id: doc.id, ...doc.data() })
+    })
   }
 }
 </script>
+
+<style scoped>
+.main-container {
+  height: 100vh;
+}
+</style>

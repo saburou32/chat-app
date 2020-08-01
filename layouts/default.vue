@@ -1,28 +1,26 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer class="elevation-6" v-model="drawer" color="primary" app dark>
-      <v-container>
+      <v-container class="pb-0">
         <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title class="title">
+            <v-list-item-title class="title" @click="test">
               チャンネル一覧
             </v-list-item-title>
-          </v-list-item-content>
-          <v-btn text x-small>
-            <v-icon dense>mdi-plus</v-icon>
-          </v-btn>
+          <channel-form />
         </v-list-item>
         <v-divider></v-divider>
       </v-container>
       <v-list nav>
-        <v-list-item link to="/">
+        <v-list-item link to="/" nuxt>
           Home
         </v-list-item>
+        <v-divider></v-divider>
         <v-list-item
+          class="mb-0"
           link
           nuxt
           :to="`/channels/${ channel.id }`"
-          v-for="channel in channels" :key="channel.name"
+          v-for="(channel, index) in channels" :key="index"
         >
           <v-list-item-content>
             <v-list-item-title>
@@ -33,12 +31,11 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark ref="header">
+    <v-app-bar app color="blue" dark ref="header">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>チャンネル名</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn outlined v-if="!isAuthenticated" @click="login">ログイン</v-btn>
-      <v-btn outlined v-else @click="logout">ログアウト</v-btn>
+      <auth-btn />
     </v-app-bar>
 
     <v-main class="main-container">
@@ -48,6 +45,8 @@
 </template>
 
 <script>
+import ChannelForm from '~/components/ChannelForm.vue'
+import AuthBtn from '~/components/AuthBtn.vue'
 import { db, firebase } from '~/plugins/firebase'
 import { mapActions } from 'vuex'
 
@@ -55,49 +54,31 @@ export default {
   props: {
     source: String,
   },
+  components: {
+    ChannelForm,
+    AuthBtn
+  },
   data: () => ({
     drawer: null,
     channels: [],
+    currentId: ['DOKODOKOYATTAZE'],
   }),
 
   methods: {
     ...mapActions(['setUser']),
 
-    // ログイン、firebaseの認証
-    login() {
-      const provider = new firebase.auth.GoogleAuthProvider()
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          this.setUser(result.user)
-        }).catch((error) => {
-          window.alert(error)
-        })
-    },
-
-    // ログアウト、firebaseの機能
-    logout() {
-      firebase.auth().signOut()
-        .then(() => {
-          this.setUser(null)
-        }).catch((error) => {
-          window.alert(error)
-        })
+    test() {
+      console.log(this.$store.state.user.uid)
     }
   },
 
-  computed: {
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    }
-  },
-
-  async mounted() {
+  mounted() {
     // 認証状態が変化した時、ログインしたユーザー情報からusersコレクションを作成する
     // また、認証状態を保持する
     firebase.auth().onAuthStateChanged((user) => {
       if(user) {
         this.setUser(user)
-        db.collection('users').doc(user.uid).set({
+          db.collection('users').doc(user.uid).set({
           userId: user.uid,
           displayName: user.displayName,
           userIcon: user.photoURL,
@@ -106,10 +87,15 @@ export default {
         })
       }
     })
+
     // チャンネル取得
-    const snapshot = await db.collection('channels').get()
-    snapshot.forEach((doc) => {
-      this.channels.push({ id: doc.id, ...doc.data() })
+    db.collection('channels').orderBy('createdAt').onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const doc = change.doc
+        if(change.type === 'added') {
+          this.channels.push({ id: doc.id, ...doc.data() })
+        }
+      })
     })
   }
 }
@@ -118,5 +104,6 @@ export default {
 <style scoped>
 .main-container {
   height: 100vh;
+  background: #eeeeef;
 }
 </style>

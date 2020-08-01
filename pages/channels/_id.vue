@@ -1,6 +1,9 @@
 <template>
   <v-container fluid>
-    <v-row class="container pt-0">
+    <!-- <div class="loading" v-if="loading">
+      <v-progress-circular indeterminate />
+    </div> -->
+    <v-row class="container pt-0 mx-auto">
       <v-col cols="12" class="messages-col">
         <messages :messages="messages" />
       </v-col>
@@ -29,7 +32,6 @@ export default {
   mounted() {
     // 投稿の監視、ブラウザリロードなしでチャット更新
     const channelId = this.$route.params.id
-
     db.collection('channels').doc(channelId).collection('messages').orderBy('createdAt')
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
@@ -46,11 +48,20 @@ export default {
 <style scoped>
 .container {
   height: 100%;
-  max-width: 100%;
 }
 
 .messages-col {
   max-height: 80%;
   overflow: scroll;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: white;
+  z-index: 9999;
 }
 </style>

@@ -23,7 +23,7 @@
       >
       </v-textarea>
       <v-row>
-        <v-btn block @click="addMessage">send</v-btn>
+        <v-btn block @click="addMessage" v-if="isAuthenticated">send</v-btn>
       </v-row>
     </v-col>
   </v-row>

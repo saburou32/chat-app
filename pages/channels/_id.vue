@@ -15,6 +15,7 @@
 import Messages from '~/components/Messages.vue'
 import ChatForm from '~/components/ChatForm.vue'
 import { db } from '~/plugins/firebase'
+import { mapActions } from 'vuex'
 
 export default {
   components: {

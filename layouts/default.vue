@@ -4,9 +4,9 @@
       <sidebar />
     </v-navigation-drawer>
 
-    <v-app-bar app color="blue" dark ref="header">
+    <v-app-bar app color="blue" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>チャンネル名</v-toolbar-title>
+      <v-toolbar-title>チャットルーム</v-toolbar-title>
       <v-spacer></v-spacer>
       <auth-btn />
     </v-app-bar>
@@ -39,7 +39,7 @@ export default {
     ...mapActions(['setUser']),
   },
 
-  mounted() {
+  async mounted() {
     // 認証状態が変化した時、ログインしたユーザー情報からusersコレクションを作成する
     // また、認証状態を保持する
     firebase.auth().onAuthStateChanged((user) => {
@@ -54,7 +54,6 @@ export default {
         })
       }
     })
-
   }
 }
 </script>

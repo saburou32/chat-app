@@ -45,10 +45,6 @@ export default {
   }),
 
   methods: {
-    openModal() {
-      this.modalVisible = true
-    },
-
     async createChannel() {
       this.fetchCreatedCount()
       if(this.$refs.channel_form.validate() && this.isAuthenticated && this.createdChannelCount < 4 ) {

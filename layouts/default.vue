@@ -1,34 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer class="elevation-6" v-model="drawer" color="primary" app dark>
-      <v-container class="pb-0">
-        <v-list-item>
-            <v-list-item-title class="title" @click="test">
-              チャンネル一覧
-            </v-list-item-title>
-          <channel-form />
-        </v-list-item>
-        <v-divider></v-divider>
-      </v-container>
-      <v-list nav>
-        <v-list-item link to="/" nuxt>
-          Home
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item
-          class="mb-0"
-          link
-          nuxt
-          :to="`/channels/${ channel.id }`"
-          v-for="(channel, index) in channels" :key="index"
-        >
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ channel.name }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <sidebar />
     </v-navigation-drawer>
 
     <v-app-bar app color="blue" dark ref="header">
@@ -45,7 +18,7 @@
 </template>
 
 <script>
-import ChannelForm from '~/components/ChannelForm.vue'
+import Sidebar from '~/components/Sidebar.vue'
 import AuthBtn from '~/components/AuthBtn.vue'
 import { db, firebase } from '~/plugins/firebase'
 import { mapActions } from 'vuex'
@@ -55,21 +28,15 @@ export default {
     source: String,
   },
   components: {
-    ChannelForm,
+    Sidebar,
     AuthBtn
   },
   data: () => ({
     drawer: null,
-    channels: [],
-    currentId: ['DOKODOKOYATTAZE'],
   }),
 
   methods: {
     ...mapActions(['setUser']),
-
-    test() {
-      console.log(this.$store.state.user.uid)
-    }
   },
 
   mounted() {
@@ -88,15 +55,6 @@ export default {
       }
     })
 
-    // チャンネル取得
-    db.collection('channels').orderBy('createdAt').onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        const doc = change.doc
-        if(change.type === 'added') {
-          this.channels.push({ id: doc.id, ...doc.data() })
-        }
-      })
-    })
   }
 }
 </script>

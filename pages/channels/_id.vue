@@ -1,8 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- <div class="loading" v-if="loading">
-      <v-progress-circular indeterminate />
-    </div> -->
     <v-row class="container pt-0 mx-auto">
       <v-col cols="12" class="messages-col">
         <messages :messages="messages" />

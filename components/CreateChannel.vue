@@ -54,7 +54,7 @@ export default {
           updatedAt: new Date().getTime(),
           owner: this.currentUser.uid
         })
-        this.channelName = null
+        this.channelName = ''
         this.modalVisible = false
       } else if(!this.$refs.channel_form.validate()) {
         window.alert('チャンネル名は1文字以上必須です')

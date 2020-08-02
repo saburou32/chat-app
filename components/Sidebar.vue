@@ -5,7 +5,7 @@
         <v-list-item-title class="title">
           チャンネル一覧
         </v-list-item-title>
-        <channel-form />
+        <create-channel />
       </v-list-item>
       <v-divider></v-divider>
     </v-container>
@@ -26,6 +26,7 @@
             {{ channel.name }}
           </v-list-item-title>
         </v-list-item-content>
+        <edit-channel :channel="channel" />
         <delete-channel :channel="channel" />
       </v-list-item>
     </v-list>
@@ -33,13 +34,15 @@
 </template>
 
 <script>
-import ChannelForm from '~/components/ChannelForm.vue'
+import CreateChannel from '~/components/CreateChannel.vue'
+import EditChannel from '~/components/EditChannel.vue'
 import DeleteChannel from '~/components/DeleteChannel.vue'
 import { db } from '~/plugins/firebase'
 
 export default {
   components: {
-    ChannelForm,
+    CreateChannel,
+    EditChannel,
     DeleteChannel,
   },
 

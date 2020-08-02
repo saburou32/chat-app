@@ -5,7 +5,6 @@
     @click.stop.prevent="modalVisible = true"
     text
     small
-    right
     min-width="0"
     v-if="isOwner"
   >
@@ -45,9 +44,10 @@ export default {
 
   methods: {
     deleteChannel() {
-      db.collection('channels').doc(this.channel.id).delete()
-      this.modalVisible = false
-      location.href = '/'
+      if(this.isAuthenticated) {
+        db.collection('channels').doc(this.channel.id).delete()
+        location.href = '/'
+      }
     }
   },
 
@@ -55,6 +55,10 @@ export default {
     currentUser() {
       return this.$store.state.user
     },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated
+    },
+
     isOwner() {
       if(this.currentUser) {
         return this.currentUser.uid === this.channel.owner

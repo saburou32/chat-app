@@ -12,7 +12,8 @@
   </v-btn>
   <v-dialog v-model="modalVisible" max-width="800">
     <v-card>
-      <v-card-title class="title">{{ channel.name }}の名前変更</v-card-title>
+      <v-card-title class="title">{{ channel.name }}</v-card-title>
+      <v-card-subtitle>変更したい名前を入力してください</v-card-subtitle>
       <v-card-text class="pb-0">
         <v-form ref="channel_form" @submit.prevent>
           <v-text-field

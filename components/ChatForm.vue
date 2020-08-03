@@ -13,15 +13,19 @@
       </v-img>
     </v-col>
     <v-col height="auto" class="pb-0">
-      <v-textarea
-        outlined
-        auto-grow
-        rows="1"
-        v-model="text"
-        :disabled="!isAuthenticated"
-        @keydown.exact.ctrl.enter="addMessage"
-      >
-      </v-textarea>
+      <v-form ref="chat_form">
+        <v-textarea
+          outlined
+          auto-grow
+          rows="1"
+          v-model="text"
+          label="メッセージを入力してください"
+          :disabled="!isAuthenticated"
+          :rules="[chatRules]"
+          @keydown.exact.ctrl.enter="addMessage"
+        >
+        </v-textarea>
+      </v-form>
       <v-row>
         <v-btn block @click="addMessage" v-if="isAuthenticated">send</v-btn>
       </v-row>
@@ -35,6 +39,7 @@ import { db, firebase } from '~/plugins/firebase'
 export default {
   data: () => ({
     text: null,
+    chatRules: value => !!value || "１文字以上は入力してください",
   }),
 
   computed: {
@@ -49,14 +54,19 @@ export default {
   methods: {
     // メッセージ保存
     async addMessage() {
-      const channelId = this.$route.params.id
-      await db.collection('channels').doc(channelId).collection('messages').add({
-        text: this.text,
-        createdAt: new Date().getTime(),
-        updatedAt: new Date().getTime(),
-        userId: this.currentUser.uid
-      })
-      this.text = null
+      if(this.$refs.chat_form.validate()) {
+        const channelId = this.$route.params.id
+        await db.collection('channels').doc(channelId).collection('messages').add({
+          text: this.text,
+          createdAt: new Date().getTime(),
+          updatedAt: new Date().getTime(),
+          userId: this.currentUser.uid
+        })
+        this.text = null
+        this.$refs.chat_form.resetValidation()
+      } else if(!this.$refs.chat_form.validate()) {
+        window.alert('1文字以上は入力してください')
+      }
     }
   }
 }

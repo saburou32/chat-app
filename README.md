@@ -1,20 +1,12 @@
 # chat-app
 
-## Build Setup
+## 作った経緯
 
 ```bash
-# install dependencies
-$ npm install
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+NuxtとVuetifyとfirestore使って何か作って見たかったので
+簡単なチャットアプリを作ってみました
+firebaseからhostingしていますのでよければ見てみてください。
+(https://chat-app-f1f7c.web.app)
 
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

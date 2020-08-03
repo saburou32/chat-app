@@ -1,19 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  /*
-  ** Nuxt rendering mode
-  ** See https://nuxtjs.org/api/configuration-mode
-  */
   mode: 'spa',
   /*
-  ** Nuxt target
-  ** See https://nuxtjs.org/api/configuration-target
-  */
-  target: 'static',
-  /*
   ** Headers of the page
-  ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
@@ -34,13 +24,11 @@ export default {
   ],
   /*
   ** Plugins to load before mounting the App
-  ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
   ],
   /*
   ** Auto import components
-  ** See https://nuxtjs.org/api/configuration-components
   */
   components: true,
   /*
@@ -58,7 +46,6 @@ export default {
   ],
   /*
   ** vuetify module configuration
-  ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
@@ -79,7 +66,6 @@ export default {
   },
   /*
   ** Build configuration
-  ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
   }

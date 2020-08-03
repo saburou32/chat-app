@@ -11,13 +11,7 @@ export default {
   props: ['messages'],
 
   components: {
-    Message
-  },
-
-  mounted() {
-    // messageが多くてスクロールできる場合、一番下のメッセージが見えるように表示する
-    let target = this.$el
-    target.scrollIntoView(false)
-  },
+    Message,
+  }
 }
 </script>

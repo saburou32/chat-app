@@ -7,6 +7,7 @@
   </template>
   <v-card>
     <v-card-title class="title">チャンネル作成</v-card-title>
+    <v-card-subtitle>作成したいチャンネルの名前を入力してください</v-card-subtitle>
     <v-card-text class="pb-0">
       <v-form ref="channel_form" @submit.prevent>
         <v-text-field
@@ -55,6 +56,7 @@ export default {
           owner: this.currentUser.uid
         })
         this.channelName = ''
+        this.$refs.channel_form.resetValidation()
         this.modalVisible = false
       } else if(!this.$refs.channel_form.validate()) {
         window.alert('チャンネル名は1文字以上必須です')

@@ -29,8 +29,8 @@ export default {
 
   mounted() {
     // 投稿の監視、ブラウザリロードなしでチャット更新
-    const channelId = this.$route.params.id
-    db.collection('channels').doc(channelId).collection('messages').orderBy('createdAt')
+    this.channelId = this.$route.params.id
+    db.collection('channels').doc(this.channelId).collection('messages').orderBy('createdAt')
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const doc = change.doc

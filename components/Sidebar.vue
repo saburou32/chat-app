@@ -69,7 +69,7 @@ export default {
       this.queryChannel(this.currentUser.uid)
     },
 
-    // 
+    // チャンネルの削除
     deleteChannel() {
       db.collection('channels').doc(channel.id).delete()
     }

@@ -8,7 +8,9 @@
 import Message from '~/components/Message.vue'
 
 export default {
-  props: ['messages'],
+  props: {
+    messages: Array,
+  },
 
   components: {
     Message,

@@ -60,7 +60,7 @@ export default {
 
 <style scoped>
 .main-container {
-  min-height: 100vh;
+  height: 100vh;
   background: #eeeeef;
 }
 </style>

@@ -20,7 +20,9 @@
 import { db } from '~/plugins/firebase'
 
 export default {
-  props: ['message'],
+  props: {
+    message: Object,
+  },
 
   data: () => ({
     user: {

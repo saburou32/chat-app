@@ -53,7 +53,7 @@ export default {
           name: this.channelName,
           createdAt: new Date().getTime(),
           updatedAt: new Date().getTime(),
-          owner: this.currentUser.uid
+          owner: this.currentUser.uid,
         })
         this.channelName = ''
         this.$refs.channel_form.resetValidation()

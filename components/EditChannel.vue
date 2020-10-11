@@ -55,7 +55,7 @@ export default {
 
   methods: {
     async editChannel() {
-      if(this.$refs.channel_form.validate() && this.isAuthenticated ) {
+      if(this.$refs.channel_form.validate() && this.isAuthenticated && this.currentUser.uid === this.channel.owner ) {
         await db.collection('channels').doc(this.channel.id).update({
           name: this.channelName
         })

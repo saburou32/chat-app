@@ -1,5 +1,5 @@
 <template>
-  <v-row class="mb-2">
+  <v-row class="mb-2 message-container">
     <v-col cols="auto">
       <v-img
         :src="user.userIcon"
@@ -12,7 +12,13 @@
       </v-img>
     </v-col>
     <v-col class="px-0 pt-2">
-      <div class="font-weight-bold body-1">{{ user.displayName }}</div>
+      <div>
+        <p class="font-weight-bold body-1 mb-0">{{ user.displayName }}</p>
+        <div class="accordion__container pa-1" v-if="isContributor">
+          <edit-message :message="message" :channelId="channelId" />
+          <delete-message :message="message" :channelId="channelId" />
+        </div>
+      </div>
       <div class="body-2">{{ message.text }}</div>
     </v-col>
   </v-row>
@@ -20,10 +26,17 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import EditMessage from '~/components/EditMessage.vue'
+import DeleteMessage from '~/components/DeleteMessage.vue'
 
 export default {
   props: {
     message: Object,
+  },
+
+  components: {
+    EditMessage,
+    DeleteMessage,
   },
 
   data: () => ({
@@ -31,10 +44,30 @@ export default {
       id: '',
       displayName: '',
       userIcom: '',
-    }
+    },
+    channelId: '',
   }),
+  
+  computed: {
+    currentUser() {
+      return this.$store.state.user
+    },
+
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated
+    },
+
+    isContributor() {
+      if(this.currentUser) {
+        return this.currentUser.uid === this.message.userId
+      } else {
+        return false
+      }
+    }
+  },
 
   async mounted() {
+    this.channelId = this.$route.params.id
     // messageのuserIdからusersコレクションのユーザー情報を持ってくる
     const userId = this.message.userId
     const doc = await db.collection('users').doc(userId).get()
@@ -42,3 +75,34 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.message-container {
+  position: relative;
+  border-radius: 5px;
+  transition: 0.3s;
+  &:hover {
+    background: #ddd;
+    & .accordion__container {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.accordion {
+  &__container {
+    display: flex;
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+  }
+
+}
+</style>

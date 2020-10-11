@@ -43,9 +43,9 @@ export default {
   }),
 
   methods: {
-    deleteChannel() {
-      if(this.isAuthenticated) {
-        db.collection('channels').doc(this.channel.id).delete()
+    async deleteChannel() {
+      if(this.isAuthenticated && this.currentUser.uid === this.message.uid) {
+        await db.collection('channels').doc(this.channel.id).delete()
         location.href = '/'
       }
     }

@@ -60,6 +60,18 @@ export default {
           if(change.type === 'added') {
             this.channels.push({ id: doc.id, ...doc.data() })
           }
+          else if (change.type === 'modified') {
+            const index = this.channels.findIndex(
+              channel => channel.id === doc.id
+            )
+            this.channels.splice(index, 1, { id: doc.id, ...doc.data() })
+          }
+          else if (change.type === 'removed') {
+            const index = this.channels.findIndex(
+              channel => channel.id === doc.id
+            )
+            this.channels.splice(index, 1)
+          }
         })
       })
     },

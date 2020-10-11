@@ -52,7 +52,6 @@ export default {
     async deleteMessage() {
       if(this.isAuthenticated && this.currentUser.uid === this.message.userId) {
         await db.collection('channels').doc(this.channelId).collection('messages').doc(this.message.id).delete()
-        location.href = `/channels/${ this.channelId }`
       } else {
         window.alert('メッセージの削除に失敗しました')
       }

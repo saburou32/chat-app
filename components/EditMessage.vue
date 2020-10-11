@@ -50,7 +50,7 @@ import { db } from '~/plugins/firebase'
 export default {
   props: {
     message: Object,
-    channelId: String,
+    channelId: String
   },
 
   data: () => ({
@@ -66,7 +66,6 @@ export default {
           text: this.messageText
         })
         this.modalVisible = false
-        location.href = `/channels/${ this.channelId }`
       } else if(!this.$refs.channel_form.validate()) {
         window.alert('チャンネル名は1文字以上必須です')
       }

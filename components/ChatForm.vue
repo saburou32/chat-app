@@ -19,9 +19,7 @@
           auto-grow
           rows="1"
           v-model="text"
-          label="メッセージを入力してください"
           :disabled="!isAuthenticated"
-          :rules="[chatRules]"
           @keydown.exact.ctrl.enter="addMessage"
         >
         </v-textarea>
@@ -39,7 +37,6 @@ import { db, firebase } from '~/plugins/firebase'
 export default {
   data: () => ({
     text: null,
-    chatRules: value => !!value || "１文字以上は入力してください",
   }),
 
   computed: {
@@ -54,7 +51,7 @@ export default {
   methods: {
     // メッセージ保存
     async addMessage() {
-      if(this.$refs.chat_form.validate()) {
+      if(this.text && this.isAuthenticated) {
         const channelId = this.$route.params.id
         await db.collection('channels').doc(channelId).collection('messages').add({
           text: this.text,
@@ -63,8 +60,7 @@ export default {
           userId: this.currentUser.uid
         })
         this.text = null
-        this.$refs.chat_form.resetValidation()
-      } else if(!this.$refs.chat_form.validate()) {
+      } else if(!this.text) {
         window.alert('1文字以上は入力してください')
       }
     }

@@ -3,15 +3,17 @@
     <v-col cols="auto">
       <v-img
         :src="user.userIcon"
-        width="50px"
-        height="50px"
+        width="12vw"
+        height="12vw"
+        max-width="50"
+        max-height="50"
         class="rounded-lg"
       >
       </v-img>
     </v-col>
-    <v-col>
-      <div class="font-weight-bold">{{ user.displayName }}</div>
-      <div class="message">{{ message.text }}</div>
+    <v-col class="px-0 pt-2">
+      <div class="font-weight-bold body-1">{{ user.displayName }}</div>
+      <div class="body-2">{{ message.text }}</div>
     </v-col>
   </v-row>
 </template>

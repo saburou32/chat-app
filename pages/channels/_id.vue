@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row class="container pt-0 mx-auto">
+    <v-row class="container pt-0 px-0 mx-auto">
       <v-col cols="12" class="messages-col">
         <messages :messages="messages" />
       </v-col>

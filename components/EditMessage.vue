@@ -61,13 +61,18 @@ export default {
 
   methods: {
     async editMessage() {
-      if(this.$refs.message_form.validate() && this.isAuthenticated && this.currentUser.uid === this.message.userId ) {
+      if(!this.isAuthenticated) return
+      if(!this.currentUser.uid === this.message.userId) return
+      if(!this.$refs.message_form.validate()) {
+        window.alert('チャンネル名は1文字以上必須です')
+        return
+      }
+      
+      if(this.$refs.message_form.validate()) {
         await db.collection('channels').doc(this.channelId).collection('messages').doc(this.message.id).update({
           text: this.messageText
         })
         this.modalVisible = false
-      } else if(!this.$refs.channel_form.validate()) {
-        window.alert('チャンネル名は1文字以上必須です')
       }
     },
   },

@@ -48,7 +48,17 @@ export default {
   methods: {
     async createChannel() {
       this.fetchCreatedCount()
-      if(this.$refs.channel_form.validate() && this.isAuthenticated && this.createdChannelCount < 4 ) {
+      if(!this.isAuthenticated) return
+      if(this.createdChannelCount > 4) {
+        window.alert('1つのアカウントで作れるチャンネル数は5つまでです')
+        return
+      }
+      if(!this.$refs.channel_form.validate()) {
+        window.alert('チャンネル名は1文字以上必須です')
+        return
+      }
+
+      if(this.$refs.channel_form.validate()) {
         await db.collection('channels').add({
           name: this.channelName,
           createdAt: new Date().getTime(),
@@ -58,10 +68,6 @@ export default {
         this.channelName = ''
         this.$refs.channel_form.resetValidation()
         this.modalVisible = false
-      } else if(!this.$refs.channel_form.validate()) {
-        window.alert('チャンネル名は1文字以上必須です')
-      } else if(this.createdChannelCount > 4) {
-        window.alert('1つのアカウントで作れるチャンネル数は5つまでです')
       }
     },
 
@@ -76,6 +82,7 @@ export default {
     currentUser() {
       return this.$store.state.user
     },
+    
     isAuthenticated() {
       return this.$store.getters.isAuthenticated
     }

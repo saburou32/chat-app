@@ -37,13 +37,15 @@ export default {
         if(change.type === 'added'){
           this.messages.push({ id: doc.id, ...doc.data() })
         }
-        else if (change.type === 'modified') {
+
+        if(change.type === 'modified') {
           const index = this.messages.findIndex(
             message => message.id === doc.id
           )
           this.messages.splice(index, 1, { id: doc.id, ...doc.data() })
         }
-        else if (change.type === 'removed') {
+        
+        if(change.type === 'removed') {
           const index = this.messages.findIndex(
             message => message.id === doc.id
           )

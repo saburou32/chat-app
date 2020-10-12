@@ -1,27 +1,29 @@
 <template>
-  <v-row class="mb-2 message-container">
-    <v-col cols="auto">
-      <v-img
-        :src="user.userIcon"
-        width="12vw"
-        height="12vw"
-        max-width="50"
-        max-height="50"
-        class="rounded-lg"
-      >
-      </v-img>
-    </v-col>
-    <v-col class="px-0 pt-2">
-      <div>
-        <p class="font-weight-bold body-1 mb-0">{{ user.displayName }}</p>
-        <div class="accordion__container pa-1" v-if="isContributor">
-          <edit-message :message="message" :channelId="channelId" />
-          <delete-message :message="message" :channelId="channelId" />
+  <v-container class="pa-2">
+    <v-row class="message-container">
+      <v-col cols="auto">
+        <v-img
+          :src="user.userIcon"
+          width="12vw"
+          height="12vw"
+          max-width="50"
+          max-height="50"
+          class="rounded-lg"
+        >
+        </v-img>
+      </v-col>
+      <v-col class="px-0 pt-2">
+        <div>
+          <p class="font-weight-bold body-1 mb-0">{{ user.displayName }}</p>
+          <div class="accordion__container pa-1" v-if="isContributor">
+            <edit-message :message="message" :channelId="channelId" />
+            <delete-message :message="message" :channelId="channelId" />
+          </div>
         </div>
-      </div>
-      <div class="body-2">{{ message.text }}</div>
-    </v-col>
-  </v-row>
+        <div class="body-2">{{ message.text }}</div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -58,11 +60,7 @@ export default {
     },
 
     isContributor() {
-      if(this.currentUser) {
-        return this.currentUser.uid === this.message.userId
-      } else {
-        return false
-      }
+      return this.currentUser.uid === this.message.userId
     }
   },
 

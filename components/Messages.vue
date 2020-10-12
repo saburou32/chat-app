@@ -20,7 +20,7 @@ export default {
     scrollEnd() {
       this.$nextTick(() => {
         const messageTarget = this.$refs.message
-        if(!messageTarget) { return }
+        if(!messageTarget) return 
         messageTarget.scrollIntoView(false)
       })
     }

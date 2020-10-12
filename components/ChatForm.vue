@@ -43,6 +43,7 @@ export default {
     currentUser() {
       return this.$store.state.user
     },
+
     isAuthenticated() {
       return this.$store.getters.isAuthenticated
     }
@@ -51,7 +52,13 @@ export default {
   methods: {
     // メッセージ保存
     async addMessage() {
-      if(this.text && this.isAuthenticated) {
+      if(!this.isAuthenticated) return
+      if(!this.text) {
+        window.alert('1文字以上は入力してください')
+        return
+      }
+      
+      if(this.text) {
         const channelId = this.$route.params.id
         await db.collection('channels').doc(channelId).collection('messages').add({
           text: this.text,
@@ -60,8 +67,6 @@ export default {
           userId: this.currentUser.uid
         })
         this.text = null
-      } else if(!this.text) {
-        window.alert('1文字以上は入力してください')
       }
     }
   }

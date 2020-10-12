@@ -55,13 +55,18 @@ export default {
 
   methods: {
     async editChannel() {
-      if(this.$refs.channel_form.validate() && this.isAuthenticated && this.currentUser.uid === this.channel.owner ) {
+      if(!this.isAuthenticated) return
+      if(!this.currentUser.uid === this.channel.owner) return
+      if(!this.$refs.channel_form.validate()) {
+        window.alert('チャンネル名は1文字以上必須です')
+        return
+      }
+
+      if(this.$refs.channel_form.validate()) {
         await db.collection('channels').doc(this.channel.id).update({
           name: this.channelName
         })
         this.modalVisible = false
-      } else if(!this.$refs.channel_form.validate()) {
-        window.alert('チャンネル名は1文字以上必須です')
       }
     },
   },
@@ -70,16 +75,13 @@ export default {
     currentUser() {
       return this.$store.state.user
     },
+    
     isAuthenticated() {
       return this.$store.getters.isAuthenticated
     },
 
     isOwner() {
-      if(this.currentUser) {
-        return this.currentUser.uid === this.channel.owner
-      } else {
-        return false
-      }
+      return this.currentUser.uid === this.channel.owner
     }
   },
 

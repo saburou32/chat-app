@@ -50,10 +50,12 @@ export default {
 
   methods: {
     async deleteMessage() {
-      if(this.isAuthenticated && this.currentUser.uid === this.message.userId) {
-        await db.collection('channels').doc(this.channelId).collection('messages').doc(this.message.id).delete()
-      } else {
+      if(!this.isAuthenticated || !this.currentUser.uid === this.message.uid) {
         window.alert('メッセージの削除に失敗しました')
+        return
+      }
+      if(this.currentUser.uid === this.message.userId) {
+        await db.collection('channels').doc(this.channelId).collection('messages').doc(this.message.id).delete()
       }
     }
   },

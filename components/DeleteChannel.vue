@@ -51,6 +51,8 @@ export default {
       
       if(this.currentUser.uid === this.channel.owner) {
         await db.collection('channels').doc(this.channel.id).delete()
+        this.modalVisible = false
+        this.$router.push('/')
       }
     }
   },

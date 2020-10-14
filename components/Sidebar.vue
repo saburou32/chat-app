@@ -59,6 +59,7 @@ export default {
           const doc = change.doc
           if(change.type === 'added') {
             this.channels.push({ id: doc.id, ...doc.data() })
+            return
           }
 
           if(change.type === 'modified') {
@@ -66,6 +67,7 @@ export default {
               channel => channel.id === doc.id
             )
             this.channels.splice(index, 1, { id: doc.id, ...doc.data() })
+            return
           }
           
           if(change.type === 'removed') {
@@ -73,6 +75,7 @@ export default {
               channel => channel.id === doc.id
             )
             this.channels.splice(index, 1)
+            return
           }
         })
       })

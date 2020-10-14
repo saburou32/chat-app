@@ -36,6 +36,7 @@ export default {
         const doc = change.doc
         if(change.type === 'added'){
           this.messages.push({ id: doc.id, ...doc.data() })
+          return
         }
 
         if(change.type === 'modified') {
@@ -43,6 +44,7 @@ export default {
             message => message.id === doc.id
           )
           this.messages.splice(index, 1, { id: doc.id, ...doc.data() })
+          return
         }
         
         if(change.type === 'removed') {
@@ -50,6 +52,7 @@ export default {
             message => message.id === doc.id
           )
           this.messages.splice(index, 1)
+          return
         }
       })
     })

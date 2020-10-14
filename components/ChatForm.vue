@@ -60,15 +60,28 @@ export default {
       
       if(this.text) {
         const channelId = this.$route.params.id
-        await db.collection('channels').doc(channelId).collection('messages').add({
-          text: this.text,
-          createdAt: new Date().getTime(),
-          updatedAt: new Date().getTime(),
-          userId: this.currentUser.uid
-        })
-        this.text = null
+        const channelRef = await db.collection('channels').doc(channelId)
+        await channelRef.get()
+          .then(doc => {
+            if(!doc.exists) {
+              window.alert('メッセージを投稿しようとしたチャンネルは存在しません')
+              this.$router.push('/')
+              return
+            } else {
+              channelRef.collection('messages').add({
+                text: this.text,
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
+                userId: this.currentUser.uid
+              })
+              this.text = null
+            }
+          })
+          .catch((error) => {
+            window.alert(error)
+          })
       }
-    }
+    },
   }
 }
 </script>

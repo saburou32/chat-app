@@ -59,6 +59,23 @@ export default {
           const doc = change.doc
           if(change.type === 'added') {
             this.channels.push({ id: doc.id, ...doc.data() })
+            return
+          }
+
+          if(change.type === 'modified') {
+            const index = this.channels.findIndex(
+              channel => channel.id === doc.id
+            )
+            this.channels.splice(index, 1, { id: doc.id, ...doc.data() })
+            return
+          }
+          
+          if(change.type === 'removed') {
+            const index = this.channels.findIndex(
+              channel => channel.id === doc.id
+            )
+            this.channels.splice(index, 1)
+            return
           }
         })
       })
@@ -68,11 +85,6 @@ export default {
     watchChannelChange() {
       this.queryChannel(this.currentUser.uid)
     },
-
-    // 
-    deleteChannel() {
-      db.collection('channels').doc(channel.id).delete()
-    }
   },
 
   computed: {
@@ -94,7 +106,7 @@ export default {
       if(this.currentUser) {
         this.watchChannelChange()
       } else {
-        this.channels = []
+        this.channels.splice(0, this.channels.length)
         this.queryChannel(this.globalOwner)
       }
     },

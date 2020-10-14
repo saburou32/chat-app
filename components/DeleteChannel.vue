@@ -43,10 +43,16 @@ export default {
   }),
 
   methods: {
-    deleteChannel() {
-      if(this.isAuthenticated) {
-        db.collection('channels').doc(this.channel.id).delete()
-        location.href = '/'
+    async deleteChannel() {
+      if(!this.isAuthenticated || !this.currentUser.uid === this.channel.owner) {
+        window.alert('チャンネルの削除に失敗しました')
+        return
+      }
+      
+      if(this.currentUser.uid === this.channel.owner) {
+        await db.collection('channels').doc(this.channel.id).delete()
+        this.modalVisible = false
+        this.$router.push('/')
       }
     }
   },
@@ -55,16 +61,13 @@ export default {
     currentUser() {
       return this.$store.state.user
     },
+
     isAuthenticated() {
       return this.$store.getters.isAuthenticated
     },
 
     isOwner() {
-      if(this.currentUser) {
-        return this.currentUser.uid === this.channel.owner
-      } else {
-        return false
-      }
+      return this.currentUser.uid === this.channel.owner
     }
   },
 }

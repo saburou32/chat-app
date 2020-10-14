@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row class="container pt-0 mx-auto">
+    <v-row class="container pt-0 px-0 mx-auto">
       <v-col cols="12" class="messages-col">
         <messages :messages="messages" />
       </v-col>
@@ -36,6 +36,23 @@ export default {
         const doc = change.doc
         if(change.type === 'added'){
           this.messages.push({ id: doc.id, ...doc.data() })
+          return
+        }
+
+        if(change.type === 'modified') {
+          const index = this.messages.findIndex(
+            message => message.id === doc.id
+          )
+          this.messages.splice(index, 1, { id: doc.id, ...doc.data() })
+          return
+        }
+        
+        if(change.type === 'removed') {
+          const index = this.messages.findIndex(
+            message => message.id === doc.id
+          )
+          this.messages.splice(index, 1)
+          return
         }
       })
     })
@@ -51,15 +68,5 @@ export default {
 .messages-col {
   max-height: 80%;
   overflow: scroll;
-}
-
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: white;
-  z-index: 9999;
 }
 </style>

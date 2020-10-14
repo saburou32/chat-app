@@ -19,9 +19,7 @@
           auto-grow
           rows="1"
           v-model="text"
-          label="メッセージを入力してください"
           :disabled="!isAuthenticated"
-          :rules="[chatRules]"
           @keydown.exact.ctrl.enter="addMessage"
         >
         </v-textarea>
@@ -39,13 +37,13 @@ import { db, firebase } from '~/plugins/firebase'
 export default {
   data: () => ({
     text: null,
-    chatRules: value => !!value || "１文字以上は入力してください",
   }),
 
   computed: {
     currentUser() {
       return this.$store.state.user
     },
+
     isAuthenticated() {
       return this.$store.getters.isAuthenticated
     }
@@ -54,20 +52,36 @@ export default {
   methods: {
     // メッセージ保存
     async addMessage() {
-      if(this.$refs.chat_form.validate()) {
-        const channelId = this.$route.params.id
-        await db.collection('channels').doc(channelId).collection('messages').add({
-          text: this.text,
-          createdAt: new Date().getTime(),
-          updatedAt: new Date().getTime(),
-          userId: this.currentUser.uid
-        })
-        this.text = null
-        this.$refs.chat_form.resetValidation()
-      } else if(!this.$refs.chat_form.validate()) {
+      if(!this.isAuthenticated) return
+      if(!this.text) {
         window.alert('1文字以上は入力してください')
+        return
       }
-    }
+      
+      if(this.text) {
+        const channelId = this.$route.params.id
+        const channelRef = await db.collection('channels').doc(channelId)
+        await channelRef.get()
+          .then(doc => {
+            if(!doc.exists) {
+              window.alert('メッセージを投稿しようとしたチャンネルは存在しません')
+              this.$router.push('/')
+              return
+            } else {
+              channelRef.collection('messages').add({
+                text: this.text,
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
+                userId: this.currentUser.uid
+              })
+              this.text = null
+            }
+          })
+          .catch((error) => {
+            window.alert(error)
+          })
+      }
+    },
   }
 }
 </script>

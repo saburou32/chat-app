@@ -81,6 +81,7 @@ export default {
     },
 
     isOwner() {
+      if(!this.isAuthenticated) return
       return this.currentUser.uid === this.channel.owner
     }
   },

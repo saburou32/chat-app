@@ -60,6 +60,7 @@ export default {
     },
 
     isContributor() {
+      if(!this.isAuthenticated) return
       return this.currentUser.uid === this.message.userId
     }
   },

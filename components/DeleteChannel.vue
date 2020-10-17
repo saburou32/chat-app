@@ -38,7 +38,6 @@ export default {
   props: ['channel'],
 
   data: () => ({
-    owner: false,
     modalVisible: false,
   }),
 
@@ -67,6 +66,7 @@ export default {
     },
 
     isOwner() {
+      if(!this.isAuthenticated) return
       return this.currentUser.uid === this.channel.owner
     }
   },

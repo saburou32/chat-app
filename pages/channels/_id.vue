@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid>
-    <v-row class="container pt-0 px-0 mx-auto">
-      <v-col cols="12" class="messages-col">
+  <v-container fluid class="chat-container">
+    <v-row class="flex-column chat-container">
+      <v-col class="chat-messages">
         <messages :messages="messages" />
       </v-col>
-      <v-col cols="12" align-self="end" height="auto" class="pb-0">
+      <v-col class="flex-grow-0">
         <chat-form />
       </v-col>
     </v-row>
@@ -60,13 +60,12 @@ export default {
 }
 </script>
 
-<style scoped>
-.container {
+<style lang="scss" scoped>
+.chat-container {
   height: 100%;
 }
 
-.messages-col {
-  max-height: 80%;
+.chat-messages {
   overflow: scroll;
 }
 </style>

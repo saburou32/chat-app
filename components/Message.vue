@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-2">
+  <v-container>
     <v-row class="message-container">
       <v-col cols="auto">
         <v-img

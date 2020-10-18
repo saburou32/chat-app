@@ -1,34 +1,36 @@
 <template>
-  <v-row>
-    <v-col cols="auto pb-0" height="auto">
-      <v-img
-        :src="currentUser.photoURL"
-        v-if="isAuthenticated"
-        width="12vw"
-        height="12vw"
-        max-width="50px"
-        max-height="50px"
-        class="rounded-lg"
-      >
-      </v-img>
-    </v-col>
-    <v-col height="auto" class="pb-0">
-      <v-form ref="chat_form">
-        <v-textarea
-          outlined
-          auto-grow
-          rows="1"
-          v-model="text"
-          :disabled="!isAuthenticated"
-          @keydown.exact.ctrl.enter="addMessage"
+  <v-container class="column">
+    <v-row>
+      <v-col cols="auto" class="pb-0">
+        <v-img
+          :src="currentUser.photoURL"
+          v-if="isAuthenticated"
+          width="12vw"
+          height="12vw"
+          max-width="50px"
+          max-height="50px"
+          class="rounded-lg"
         >
-        </v-textarea>
-      </v-form>
-      <v-row>
-        <v-btn block @click="addMessage" v-if="isAuthenticated">send</v-btn>
-      </v-row>
-    </v-col>
-  </v-row>
+        </v-img>
+      </v-col>
+      <v-col class="pb-0">
+        <v-form ref="chat_form">
+          <v-textarea
+            outlined
+            rows="1"
+            auto-grow
+            v-model="text"
+            :disabled="!isAuthenticated"
+            @keydown.exact.ctrl.enter="addMessage"
+          >
+          </v-textarea>
+        </v-form>
+      </v-col>
+    </v-row>
+    <v-row class="my-n2 px-3">
+      <v-btn block @click="addMessage" v-if="isAuthenticated">send</v-btn>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

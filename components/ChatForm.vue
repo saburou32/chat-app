@@ -38,7 +38,8 @@ import { db, firebase } from '~/plugins/firebase'
 
 export default {
   data: () => ({
-    text: null,
+    text: '',
+    currentChannel: ''
   }),
 
   computed: {
@@ -77,6 +78,9 @@ export default {
                 userId: this.currentUser.uid
               })
               this.text = null
+              channelRef.update({
+                joinMembsers: firebase.firestore.FieldValue.arrayUnion(this.currentUser.uid)
+              })
             }
           })
           .catch((error) => {
@@ -84,6 +88,6 @@ export default {
           })
       }
     },
-  }
+  },
 }
 </script>

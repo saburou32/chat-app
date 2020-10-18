@@ -64,6 +64,7 @@ export default {
           createdAt: new Date().getTime(),
           updatedAt: new Date().getTime(),
           owner: this.currentUser.uid,
+          joinMenbers: [],
         })
         this.channelName = ''
         this.$refs.channel_form.resetValidation()

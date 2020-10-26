@@ -26,6 +26,13 @@ exports.deleteDocument = functions
           yes: true,
           token: functions.config().fb.token
         })
+      await firebaseTools.firestore
+        .delete(`channels/${channelId}/memberList`, {
+          project: process.env.GCLOUD_PROJECT,
+          recursive: true,
+          yes: true,
+          token: functions.config().fb.token
+        })
     } catch (err) {
       console.error(err)
     }

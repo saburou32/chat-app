@@ -5,7 +5,10 @@
         <messages :messages="messages" />
       </v-col>
       <v-col class="flex-grow-0">
-        <chat-form />
+        <chat-form
+          :channelMembers="channelMembers"
+          :channelName="channelName"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -25,12 +28,45 @@ export default {
 
   data: () => ({
     messages: [],
+    memberList: [],
+    channelMembers: [],
+    channelName: '',
   }),
 
-  mounted() {
+  methods: {
+    ...mapActions(['setChannelId']),
+
+    async memberListQuery() {
+      this.channelMembers.splice(0)
+      for(const elem of this.memberList) {
+        const userRef = await db.collection('users').where('userId', '==', elem).get()
+        userRef.forEach(doc => {
+          if(!doc.exists) return
+          this.channelMembers.push({ ...doc.data() })
+        })
+      }
+    }
+  },
+
+  async mounted() {
+    this.setChannelId(this.$route.params.id)
+    const channelRef = await db.collection('channels').doc(this.$store.state.channelId)
+    channelRef.get()
+      .then(doc => {
+        if(!doc.exists) {
+          window.alert('申し訳ありませんが、開こうとしたチャンネルは存在しないようです')
+          this.$router.push('/')
+          return
+        } else {
+          this.channelName = doc.data().name
+        }
+      })
+      .catch((error) => {
+        window.alert(error)
+      })
+
     // 投稿の監視、ブラウザリロードなしでチャット更新
-    this.channelId = this.$route.params.id
-    db.collection('channels').doc(this.channelId).collection('messages').orderBy('createdAt')
+    channelRef.collection('messages').orderBy('createdAt')
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const doc = change.doc
@@ -41,7 +77,7 @@ export default {
 
         if(change.type === 'modified') {
           const index = this.messages.findIndex(
-            message => message.id === doc.id
+            messages => message.id === doc.id
           )
           this.messages.splice(index, 1, { id: doc.id, ...doc.data() })
           return
@@ -49,13 +85,39 @@ export default {
         
         if(change.type === 'removed') {
           const index = this.messages.findIndex(
-            message => message.id === doc.id
+            messages => message.id === doc.id
           )
           this.messages.splice(index, 1)
           return
         }
       })
     })
+
+    // チャンネル参加者一覧クエリ
+    channelRef.collection('memberList')
+    .onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const doc = change.doc
+        if(change.type === 'added'){
+          this.memberList.push(doc.id)
+          return
+        }
+        
+        if(change.type === 'removed') {
+          const index = this.memberList.findIndex(
+            memberList => member.id === doc.id
+          )
+          this.memberList.splice(index, 1)
+          return
+        }
+      })
+    })
+  },
+
+  watch: {
+    memberList: function() {
+      this.memberListQuery()
+    }
   }
 }
 </script>

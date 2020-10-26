@@ -26,6 +26,7 @@
         @click="createChannel"
         text
         color="primary"
+        :disabled="isProcessing"
       >
       creat
       </v-btn>
@@ -43,6 +44,7 @@ export default {
     channelName: '',
     channelRules: value => !!value || "チャンネル名は入力必須です",
     createdChannelCount: '',
+    isProcessing: false,
   }),
 
   methods: {
@@ -59,17 +61,19 @@ export default {
       }
 
       if(this.$refs.channel_form.validate()) {
+        this.isProcessing = true
         await db.collection('channels').add({
           name: this.channelName,
           createdAt: new Date().getTime(),
           updatedAt: new Date().getTime(),
           owner: this.currentUser.uid,
-          joinMenbers: [],
         })
         this.channelName = ''
         this.$refs.channel_form.resetValidation()
         this.modalVisible = false
+        this.isProcessing = false
       }
+
     },
 
     async fetchCreatedCount() {

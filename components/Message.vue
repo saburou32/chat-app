@@ -16,11 +16,11 @@
         <div>
           <p class="font-weight-bold body-1 mb-0">{{ user.displayName }}</p>
           <div class="accordion__container pa-1" v-if="isContributor">
-            <edit-message :message="message" :channelId="channelId" />
-            <delete-message :message="message" :channelId="channelId" />
+            <edit-message :message="message" :channelId="this.$store.state.channelId" />
+            <delete-message :message="message" :channelId="this.$store.state.channelId" />
           </div>
         </div>
-        <div class="body-2">{{ message.text }}</div>
+        <div class="body-2 message-text">{{ message.text }}</div>
       </v-col>
     </v-row>
   </v-container>
@@ -47,7 +47,6 @@ export default {
       displayName: '',
       userIcom: '',
     },
-    channelId: '',
   }),
   
   computed: {
@@ -66,7 +65,6 @@ export default {
   },
 
   async mounted() {
-    this.channelId = this.$route.params.id
     // messageのuserIdからusersコレクションのユーザー情報を持ってくる
     const userId = this.message.userId
     const doc = await db.collection('users').doc(userId).get()
@@ -102,6 +100,9 @@ export default {
     visibility: hidden;
     transition: 0.3s;
   }
+}
 
+.message-text {
+  white-space: pre-line;
 }
 </style>

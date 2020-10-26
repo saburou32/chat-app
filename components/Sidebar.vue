@@ -94,11 +94,7 @@ export default {
   },
 
   mounted() {
-    if(this.currentUser) {
-      this.watchChannelChange()
-    } else {
-      this.queryChannel(this.globalOwner)
-    }
+    this.queryChannel(this.globalOwner)
   },
 
   watch: {

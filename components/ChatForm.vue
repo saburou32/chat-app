@@ -202,7 +202,7 @@ export default {
       if(!beforeStr.length) return
 
       // カーソル位置に一番近いメンション文字列を取り出す
-      const mentionReg = /(@|＠)\S*/gi
+      const mentionReg = /(?<=^|[^\w])(@|＠)(\S*)/gi
       const mentionArray = beforeStr.match(mentionReg)
       if(!mentionArray) return
       const searchStr = mentionArray.pop()
@@ -258,7 +258,7 @@ export default {
       const [textarea, pos] = this.getCaretPosition()
       const [len, before, after] = this.getCaretStr(pos)
 
-      const mentionReg = /(@|＠)\S*/gi
+      const mentionReg = /(?<=^|[^\w])(@|＠)(\S*)/gi
       const beforeMentionArray = before.match(mentionReg)
       if(!beforeMentionArray) return
       const searchStr = beforeMentionArray.pop()

@@ -50,7 +50,7 @@ export default {
 
   methods: {
     async deleteMessage() {
-      if(!this.isAuthenticated || !this.currentUser.uid === this.message.uid) {
+      if(!this.isAuthenticated || !this.currentUser.uid === this.message.userId) {
         window.alert('メッセージの削除に失敗しました')
         return
       }

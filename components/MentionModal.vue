@@ -5,11 +5,11 @@
     max-width="800"
   >
     <v-list-item
-      v-for="channelMember in channelMembers"
-      :key="channelMember.userId"
+      v-for="candidateUser in candidateUsers"
+      :key="candidateUser.userId"
       dense
       link
-      @click="sendMentionUser(channelMember.displayName)"
+      @click="sendMentionUser(candidateUser.displayName)"
     >
       <v-list-item-avatar
         :tile="true"
@@ -17,12 +17,12 @@
         class="my-2 mr-2"
       >
         <v-img
-          :src="channelMember.userIcon"
+          :src="candidateUser.userIcon"
         ></v-img>
       </v-list-item-avatar>
       <v-list-item-content class="py-2">
         <v-list-item-title class="subtitle-2 font-weight-bold">
-          {{ channelMember.displayName }}
+          {{ candidateUser.displayName }}
         </v-list-item-title>
       </v-list-item-content>
     </v-list-item>
@@ -32,7 +32,7 @@
 <script>
 export default {
   props: {
-    channelMembers: Array,
+    candidateUsers: Array,
   },
 
   data: () => ({

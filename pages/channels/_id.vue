@@ -77,7 +77,7 @@ export default {
 
         if(change.type === 'modified') {
           const index = this.messages.findIndex(
-            messages => message.id === doc.id
+            message => message.id === doc.id
           )
           this.messages.splice(index, 1, { id: doc.id, ...doc.data() })
           return
@@ -85,7 +85,7 @@ export default {
         
         if(change.type === 'removed') {
           const index = this.messages.findIndex(
-            messages => message.id === doc.id
+            message => message.id === doc.id
           )
           this.messages.splice(index, 1)
           return

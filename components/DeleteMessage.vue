@@ -37,11 +37,11 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
     message: Object,
-    channelId: String,
   },
 
   data: () => ({
@@ -55,19 +55,17 @@ export default {
         return
       }
       if(this.currentUser.uid === this.message.userId) {
-        await db.collection('channels').doc(this.channelId).collection('messages').doc(this.message.id).delete()
+        await db.collection('channels').doc(this.currentChannel).collection('messages').doc(this.message.id).delete()
       }
     }
   },
 
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    },
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+      'currentChannel',
+    ]),
   },
 }
 </script>

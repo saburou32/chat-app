@@ -50,13 +50,12 @@ export default {
 
   async mounted() {
     this.setChannelId(this.$route.params.id)
-    const channelRef = await db.collection('channels').doc(this.$store.state.channelId)
+    const channelRef = await db.collection('channels').doc(this.$route.params.id)
     channelRef.get()
       .then(doc => {
         if(!doc.exists) {
           window.alert('申し訳ありませんが、開こうとしたチャンネルは存在しないようです')
           this.$router.push('/')
-          return
         } else {
           this.channelName = doc.data().name
         }

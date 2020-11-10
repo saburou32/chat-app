@@ -89,6 +89,7 @@
 <script>
 import { db, functions } from '~/plugins/firebase'
 import MentionModal from '~/components/MentionModal.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -102,13 +103,11 @@ export default {
 
   data: () => ({
     text: '',
-    currentChannel: '',
     isProcessing: false,
     isActiveTextarea: false,
     openModal: false,
     mentionUsers: [],
     candidateUsers: [],
-    composing: false,
     snackBar: {
       color: '',
       message: '',
@@ -128,7 +127,7 @@ export default {
       if(this.text) {
         this.mentionToUserReg()
         this.sendMail()
-        const channelRef = await db.collection('channels').doc(this.$store.state.channelId)
+        const channelRef = await db.collection('channels').doc(this.currentChannel)
         this.isProcessing = true
         channelRef.collection('messages').add({
           text: this.text,
@@ -290,13 +289,11 @@ export default {
   },
 
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    },
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+      'currentChannel'
+    ])
   },
 
   watch: {

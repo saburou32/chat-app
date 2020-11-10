@@ -24,9 +24,6 @@ import { db, firebase } from '~/plugins/firebase'
 import { mapActions } from 'vuex'
 
 export default {
-  props: {
-    source: String,
-  },
   components: {
     Sidebar,
     AuthBtn

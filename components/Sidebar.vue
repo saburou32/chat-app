@@ -38,6 +38,7 @@ import CreateChannel from '~/components/CreateChannel.vue'
 import EditChannel from '~/components/EditChannel.vue'
 import DeleteChannel from '~/components/DeleteChannel.vue'
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -48,7 +49,7 @@ export default {
 
   data: () => ({
     channels: [],
-    globalOwner: 'DOKODOKOYATTAZE',
+    globalOwner: process.env.GLOBAL_CHANNEL_OWNER,
   }),
 
   methods: {
@@ -88,9 +89,7 @@ export default {
   },
 
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    }
+    ...mapGetters(['currentUser'])
   },
 
   mounted() {
@@ -102,7 +101,7 @@ export default {
       if(this.currentUser) {
         this.watchChannelChange()
       } else {
-        this.channels.splice(0, this.channels.length)
+        this.channels.splice(0)
         this.queryChannel(this.globalOwner)
       }
     },

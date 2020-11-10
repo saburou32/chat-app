@@ -16,8 +16,8 @@
         <div>
           <p class="font-weight-bold body-1 mb-0">{{ user.displayName }}</p>
           <div class="accordion__container pa-1" v-if="isContributor">
-            <edit-message :message="message" :channelId="this.$store.state.channelId" />
-            <delete-message :message="message" :channelId="this.$store.state.channelId" />
+            <edit-message :message="message" />
+            <delete-message :message="message" />
           </div>
         </div>
         <div class="body-2 message-text">{{ message.text }}</div>
@@ -28,6 +28,7 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 import EditMessage from '~/components/EditMessage.vue'
 import DeleteMessage from '~/components/DeleteMessage.vue'
 
@@ -50,13 +51,10 @@ export default {
   }),
   
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    },
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+    ]),
 
     isContributor() {
       if(!this.isAuthenticated) return

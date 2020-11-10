@@ -46,11 +46,11 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
     message: Object,
-    channelId: String
   },
 
   data: () => ({
@@ -69,7 +69,7 @@ export default {
       }
       
       if(this.$refs.message_form.validate()) {
-        await db.collection('channels').doc(this.channelId).collection('messages').doc(this.message.id).update({
+        await db.collection('channels').doc(this.currentChannel).collection('messages').doc(this.message.id).update({
           text: this.messageText
         })
         this.modalVisible = false
@@ -78,13 +78,11 @@ export default {
   },
 
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    },
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+      'currentChannel',
+    ]),
   },
 
   mounted() {

@@ -37,6 +37,7 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 
 export default {
   data: () => ({
@@ -84,13 +85,10 @@ export default {
   },
 
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-    
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    }
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+    ])
   },
 }
 </script>

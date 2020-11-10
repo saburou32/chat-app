@@ -10,9 +10,11 @@ export const state = () => {
 
 export const getters = {
   // ログイン確認
-  isAuthenticated(state) {
-    return !!state.user
-  },
+  isAuthenticated: state => !!state.user,
+
+  currentUser: state => state.user,
+
+  currentChannel: state => state.channelId,
 }
 
 export const mutations = {

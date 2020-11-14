@@ -2,6 +2,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/functions'
 
 // firebaseのapps未設定である場合下記実行、情報は.envから持ってくる
 if(!firebase.apps.length) {
@@ -20,8 +21,10 @@ if(!firebase.apps.length) {
 }
 
 const db = firebase.firestore()
+const functions = firebase.functions()
 
 export {
   firebase,
-  db
+  db,
+  functions,
 }

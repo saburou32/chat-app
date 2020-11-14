@@ -1,6 +1,10 @@
 <template>
-  <div class="messages-container" ref="message">
-    <message v-for="message in messages" :key="message.id" :message="message" />
+  <div ref="message">
+    <message
+      v-for="message in messages"
+      :key="message.id"
+      :message="message"
+    />
   </div>
 </template>
 

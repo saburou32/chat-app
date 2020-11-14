@@ -24,9 +24,6 @@ import { db, firebase } from '~/plugins/firebase'
 import { mapActions } from 'vuex'
 
 export default {
-  props: {
-    source: String,
-  },
   components: {
     Sidebar,
     AuthBtn
@@ -47,6 +44,7 @@ export default {
         this.setUser(user)
           db.collection('users').doc(user.uid).set({
           userId: user.uid,
+          email: user.email,
           displayName: user.displayName,
           userIcon: user.photoURL,
           createdAt: new Date().getTime(),
@@ -61,6 +59,5 @@ export default {
 <style scoped>
 .main-container {
   height: 100vh;
-  background: #eeeeef;
 }
 </style>

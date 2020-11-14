@@ -9,7 +9,7 @@
 
 <script>
 import { firebase } from '~/plugins/firebase'
-import { mapActions } from 'vuex' 
+import { mapActions, mapGetters } from 'vuex' 
 export default {
   methods: {
     ...mapActions(['setUser']),
@@ -36,9 +36,7 @@ export default {
   },
   
   computed: {
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    }
+    ...mapGetters(['isAuthenticated']),
   }
 }
 </script>

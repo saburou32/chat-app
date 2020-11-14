@@ -43,6 +43,7 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 
 export default {
   props: ['channel'],
@@ -72,13 +73,10 @@ export default {
   },
 
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-    
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    },
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+    ]),
 
     isOwner() {
       if(!this.isAuthenticated) return

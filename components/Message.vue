@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-2">
+  <v-container>
     <v-row class="message-container">
       <v-col cols="auto">
         <v-img
@@ -16,11 +16,11 @@
         <div>
           <p class="font-weight-bold body-1 mb-0">{{ user.displayName }}</p>
           <div class="accordion__container pa-1" v-if="isContributor">
-            <edit-message :message="message" :channelId="channelId" />
-            <delete-message :message="message" :channelId="channelId" />
+            <edit-message :message="message" />
+            <delete-message :message="message" />
           </div>
         </div>
-        <div class="body-2">{{ message.text }}</div>
+        <div class="body-2 message-text">{{ message.text }}</div>
       </v-col>
     </v-row>
   </v-container>
@@ -28,6 +28,7 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 import EditMessage from '~/components/EditMessage.vue'
 import DeleteMessage from '~/components/DeleteMessage.vue'
 
@@ -47,17 +48,13 @@ export default {
       displayName: '',
       userIcom: '',
     },
-    channelId: '',
   }),
   
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    },
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+    ]),
 
     isContributor() {
       if(!this.isAuthenticated) return
@@ -66,7 +63,6 @@ export default {
   },
 
   async mounted() {
-    this.channelId = this.$route.params.id
     // messageのuserIdからusersコレクションのユーザー情報を持ってくる
     const userId = this.message.userId
     const doc = await db.collection('users').doc(userId).get()
@@ -102,6 +98,9 @@ export default {
     visibility: hidden;
     transition: 0.3s;
   }
+}
 
+.message-text {
+  white-space: pre-line;
 }
 </style>

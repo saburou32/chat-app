@@ -26,6 +26,7 @@
         @click="createChannel"
         text
         color="primary"
+        :disabled="isProcessing"
       >
       creat
       </v-btn>
@@ -36,6 +37,7 @@
 
 <script>
 import { db } from '~/plugins/firebase'
+import { mapGetters } from 'vuex'
 
 export default {
   data: () => ({
@@ -43,6 +45,7 @@ export default {
     channelName: '',
     channelRules: value => !!value || "チャンネル名は入力必須です",
     createdChannelCount: '',
+    isProcessing: false,
   }),
 
   methods: {
@@ -59,6 +62,7 @@ export default {
       }
 
       if(this.$refs.channel_form.validate()) {
+        this.isProcessing = true
         await db.collection('channels').add({
           name: this.channelName,
           createdAt: new Date().getTime(),
@@ -68,7 +72,9 @@ export default {
         this.channelName = ''
         this.$refs.channel_form.resetValidation()
         this.modalVisible = false
+        this.isProcessing = false
       }
+
     },
 
     async fetchCreatedCount() {
@@ -79,13 +85,10 @@ export default {
   },
 
   computed: {
-    currentUser() {
-      return this.$store.state.user
-    },
-    
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated
-    }
+    ...mapGetters([
+      'isAuthenticated',
+      'currentUser',
+    ])
   },
 }
 </script>

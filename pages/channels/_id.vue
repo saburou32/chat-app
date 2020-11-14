@@ -1,11 +1,14 @@
 <template>
-  <v-container fluid>
-    <v-row class="container pt-0 px-0 mx-auto">
-      <v-col cols="12" class="messages-col">
+  <v-container fluid class="chat-container">
+    <v-row class="flex-column chat-container">
+      <v-col class="chat-messages">
         <messages :messages="messages" />
       </v-col>
-      <v-col cols="12" align-self="end" height="auto" class="pb-0">
-        <chat-form />
+      <v-col class="flex-grow-0">
+        <chat-form
+          :channelMembers="channelMembers"
+          :channelName="channelName"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -25,12 +28,44 @@ export default {
 
   data: () => ({
     messages: [],
+    memberList: [],
+    channelMembers: [],
+    channelName: '',
   }),
 
-  mounted() {
+  methods: {
+    ...mapActions(['setChannelId']),
+
+    async memberListQuery() {
+      this.channelMembers.splice(0)
+      for(const elem of this.memberList) {
+        const userRef = await db.collection('users').where('userId', '==', elem).get()
+        userRef.forEach(doc => {
+          if(!doc.exists) return
+          this.channelMembers.push({ ...doc.data() })
+        })
+      }
+    }
+  },
+
+  async mounted() {
+    this.setChannelId(this.$route.params.id)
+    const channelRef = await db.collection('channels').doc(this.$route.params.id)
+    channelRef.get()
+      .then(doc => {
+        if(!doc.exists) {
+          window.alert('申し訳ありませんが、開こうとしたチャンネルは存在しないようです')
+          this.$router.push('/')
+        } else {
+          this.channelName = doc.data().name
+        }
+      })
+      .catch((error) => {
+        window.alert(error)
+      })
+
     // 投稿の監視、ブラウザリロードなしでチャット更新
-    this.channelId = this.$route.params.id
-    db.collection('channels').doc(this.channelId).collection('messages').orderBy('createdAt')
+    channelRef.collection('messages').orderBy('createdAt')
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const doc = change.doc
@@ -56,17 +91,42 @@ export default {
         }
       })
     })
+
+    // チャンネル参加者一覧クエリ
+    channelRef.collection('memberList')
+    .onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const doc = change.doc
+        if(change.type === 'added'){
+          this.memberList.push(doc.id)
+          return
+        }
+        
+        if(change.type === 'removed') {
+          const index = this.memberList.findIndex(
+            memberList => member.id === doc.id
+          )
+          this.memberList.splice(index, 1)
+          return
+        }
+      })
+    })
+  },
+
+  watch: {
+    memberList: function() {
+      this.memberListQuery()
+    }
   }
 }
 </script>
 
-<style scoped>
-.container {
+<style lang="scss" scoped>
+.chat-container {
   height: 100%;
 }
 
-.messages-col {
-  max-height: 80%;
+.chat-messages {
   overflow: scroll;
 }
 </style>

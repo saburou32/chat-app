@@ -1,36 +1,40 @@
 <template>
-  <div>
-    <v-container class="pb-0">
-      <v-list-item>
-        <v-list-item-title class="title">
-          チャンネル一覧
-        </v-list-item-title>
-        <create-channel />
-      </v-list-item>
-      <v-divider></v-divider>
-    </v-container>
-    <v-list nav>
-      <v-list-item link to="/" nuxt>
-        Home
-      </v-list-item>
-      <v-divider></v-divider>
-      <v-list-item
-        class="mb-0"
-        link
-        nuxt
-        :to="`/channels/${ channel.id }`"
+  <v-container class="pa-0">
+    <v-list-item class="list-title border">
+      <v-list-item-title class="font-weight-bold">
+        チャンネル一覧
+      </v-list-item-title>
+      <create-channel />
+    </v-list-item>
+    <ul class="pl-0 side-fontSize">
+      <li class="pl-4 py-2 side-list">
+        <nuxt-link
+          to="/"
+          class="side-link side_channelcolor--text"
+        >
+          Home
+        </nuxt-link>
+      </li>
+      <li
         v-for="(channel, index) in channels" :key="index"
+        class="pl-4 pr-2 py-1 d-flex justify-space-between side-list"
       >
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ channel.name }}
-          </v-list-item-title>
-        </v-list-item-content>
-        <edit-channel :channel="channel" />
-        <delete-channel :channel="channel" />
-      </v-list-item>
-    </v-list>
-  </div>
+        <nuxt-link
+          :to="`/channels/${ channel.id }`"
+          class="side-link side_channelcolor--text"
+        >
+          # {{ channel.name }}
+        </nuxt-link>
+        <div class="d-flex">
+          <edit-channel :channel="channel" />
+          <delete-channel
+            :channel="channel"
+            class="pl-2"
+          />
+        </div>
+      </li>
+    </ul>
+  </v-container>
 </template>
 
 <script>
@@ -89,7 +93,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['currentUser'])
+    ...mapGetters(['currentUser']),
   },
 
   mounted() {
@@ -108,3 +112,27 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.list-title {
+  height: 64px;
+}
+
+.side-fontSize {
+  font-size: 15px;
+}
+
+.side-list:hover {
+  background: #350d36;
+}
+
+.side-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.side-active {
+  background: #1264a3;
+}
+</style>

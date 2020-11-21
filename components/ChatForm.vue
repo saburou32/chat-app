@@ -1,5 +1,5 @@
 <template>
-  <v-container class="column">
+  <v-container class="column pb-0">
     <v-row>
       <v-col cols="auto" class="pb-0">
         <v-img
@@ -26,7 +26,7 @@
               rows="2"
               auto-grow
               hide-details="false"
-              :placeholder="`#${ channelName } へのメッセージ`"
+              :placeholder="`#${ currentChannelName } へのメッセージ`"
               v-model="text"
               :disabled="isProcessing"
               @click="openModal = false"
@@ -93,7 +93,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   props: {
-    channelName: String,
     channelMembers: Array,
   },
 
@@ -159,7 +158,7 @@ export default {
     },
 
     sendMail() {
-      if(!this.mentionUsers) return
+      if(!this.mentionUsers.length) return
       const mailer = functions.httpsCallable('sendMail')
       const mentionUsersName = []
       this.mentionUsers.forEach(mentionUser => {
@@ -292,7 +291,8 @@ export default {
     ...mapGetters([
       'isAuthenticated',
       'currentUser',
-      'currentChannel'
+      'currentChannel',
+      'currentChannelName',
     ])
   },
 

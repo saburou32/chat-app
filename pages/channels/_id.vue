@@ -1,13 +1,12 @@
 <template>
-  <v-container fluid class="chat-container">
+  <v-container fluid class="chat-container pb-0">
     <v-row class="flex-column chat-container">
       <v-col class="chat-messages">
         <messages :messages="messages" />
       </v-col>
-      <v-col class="flex-grow-0">
+      <v-col class="flex-grow-0 pb-0">
         <chat-form
           :channelMembers="channelMembers"
-          :channelName="channelName"
         />
       </v-col>
     </v-row>
@@ -30,11 +29,14 @@ export default {
     messages: [],
     memberList: [],
     channelMembers: [],
-    channelName: '',
   }),
 
   methods: {
-    ...mapActions(['setChannelId']),
+    ...mapActions([
+      'setChannelId',
+      'setChannelName',
+      'setChannelMembers',
+    ]),
 
     async memberListQuery() {
       this.channelMembers.splice(0)
@@ -45,6 +47,7 @@ export default {
           this.channelMembers.push({ ...doc.data() })
         })
       }
+      this.setChannelMembers(this.channelMembers)
     }
   },
 
@@ -57,7 +60,7 @@ export default {
           window.alert('申し訳ありませんが、開こうとしたチャンネルは存在しないようです')
           this.$router.push('/')
         } else {
-          this.channelName = doc.data().name
+          this.setChannelName(doc.data().name)
         }
       })
       .catch((error) => {
@@ -116,7 +119,7 @@ export default {
   watch: {
     memberList: function() {
       this.memberListQuery()
-    }
+    },
   }
 }
 </script>

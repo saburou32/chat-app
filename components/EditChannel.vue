@@ -1,44 +1,44 @@
 <template>
-<v-list-item-action>
-  <v-btn
-    class="px-0"
-    @click.stop.prevent="modalVisible = true"
-    text
-    small
-    min-width="0"
-    v-if="isOwner"
-  >
-  <v-icon>mdi-pencil</v-icon>
-  </v-btn>
-  <v-dialog v-model="modalVisible" max-width="800">
-    <v-card>
-      <v-card-title class="title">{{ channel.name }}</v-card-title>
-      <v-card-subtitle>変更したい名前を入力してください</v-card-subtitle>
-      <v-card-text class="pb-0">
-        <v-form ref="channel_form" @submit.prevent>
-          <v-text-field
-            label="Channel name"
-            v-model="channelName"
-            :rules="[channelRules]"
-            @keydown.exact.ctrl.enter="editChannel"
+  <div>
+    <v-btn
+      class="px-0"
+      @click.stop.prevent="modalVisible = true"
+      text
+      x-small
+      min-width="0"
+      v-if="isOwner"
+    >
+    <v-icon>mdi-pencil</v-icon>
+    </v-btn>
+    <v-dialog v-model="modalVisible" max-width="800">
+      <v-card>
+        <v-card-title class="title">{{ channel.name }}</v-card-title>
+        <v-card-subtitle>変更したい名前を入力してください</v-card-subtitle>
+        <v-card-text class="pb-0">
+          <v-form ref="channel_form" @submit.prevent>
+            <v-text-field
+              label="Channel name"
+              v-model="channelName"
+              :rules="[channelRules]"
+              @keydown.exact.ctrl.enter="editChannel"
+            >
+            </v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="mr-4"
+            @click="editChannel"
+            text
+            color="primary"
           >
-          </v-text-field>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          class="mr-4"
-          @click="editChannel"
-          text
-          color="primary"
-        >
-        change
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-</v-list-item-action>
+          change
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>

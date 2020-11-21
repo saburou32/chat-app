@@ -1,17 +1,34 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer class="elevation-6" v-model="drawer" color="primary" app dark>
-      <sidebar />
-    </v-navigation-drawer>
-
-    <v-app-bar app color="blue" dark>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>チャットルーム</v-toolbar-title>
+    <v-system-bar
+      app
+      dark
+      height="38px"
+      color="header"
+    >
       <v-spacer></v-spacer>
       <auth-btn />
+    </v-system-bar>
+    <v-navigation-drawer
+      app
+      dark
+      color="sidetheme"
+      v-model="drawer"
+    >
+      <sidebar />
+    </v-navigation-drawer>
+    <v-app-bar
+      app
+      flat
+      dense
+      height="64px"
+      class="bg-white border-bottom"
+    >
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>{{ currentChannelName }}</v-toolbar-title>
+      <v-spacer></v-spacer>
     </v-app-bar>
-
-    <v-main class="main-container">
+    <v-main light>
       <nuxt />
     </v-main>
   </v-app>
@@ -21,19 +38,28 @@
 import Sidebar from '~/components/Sidebar.vue'
 import AuthBtn from '~/components/AuthBtn.vue'
 import { db, firebase } from '~/plugins/firebase'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     Sidebar,
     AuthBtn
   },
+
   data: () => ({
     drawer: null,
+    channelName: '',
   }),
 
   methods: {
     ...mapActions(['setUser']),
+  },
+
+  computed: {
+    ...mapGetters([
+      'currentChannelName',
+      'currentChannelMembers'
+    ]),
   },
 
   async mounted() {
@@ -59,5 +85,9 @@ export default {
 <style scoped>
 .main-container {
   height: 100vh;
+}
+
+.bg-white {
+  background-color: #fff;
 }
 </style>

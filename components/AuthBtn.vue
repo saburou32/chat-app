@@ -1,7 +1,21 @@
 <template>
   <div>
-    <v-btn outlined v-if="!isAuthenticated" @click="login">ログイン</v-btn>
-    <v-btn outlined v-else @click="logout" to="/" nuxt>
+    <v-btn
+      outlined
+      small
+      v-if="!isAuthenticated"
+      @click="login"
+    >
+      ログイン
+    </v-btn>
+    <v-btn
+      outlined
+      small
+      v-else
+      @click="logout"
+      to="/"
+      nuxt
+    >
       ログアウト
     </v-btn>
   </div>

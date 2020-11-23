@@ -335,6 +335,7 @@ export default {
 .active {
   &__textarea {
     background: #f8f8f8;
+    border-radius: 0 0 4px 4px;
   }
 }
 </style>

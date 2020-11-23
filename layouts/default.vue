@@ -14,6 +14,7 @@
       dark
       color="sidetheme"
       v-model="drawer"
+      mobile-breakpoint="900"
     >
       <sidebar />
     </v-navigation-drawer>
@@ -23,6 +24,7 @@
       dense
       height="64px"
       class="bg-white border-bottom"
+      v-if="isChannel"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ currentChannelName }}</v-toolbar-title>
@@ -60,6 +62,10 @@ export default {
       'currentChannelName',
       'currentChannelMembers'
     ]),
+
+    isChannel() {
+      return !!this.$route.params.id
+    },
   },
 
   async mounted() {

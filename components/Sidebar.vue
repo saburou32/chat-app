@@ -7,21 +7,21 @@
       <create-channel />
     </v-list-item>
     <ul class="pl-0 side-fontSize">
-      <li class="pl-4 py-2 side-list">
+      <li class="side-list">
         <nuxt-link
           to="/"
-          class="side-link side_channelcolor--text"
+          class="pl-4 py-2 side-link side_channelcolor--text"
         >
           Home
         </nuxt-link>
       </li>
       <li
         v-for="(channel, index) in channels" :key="index"
-        class="pl-4 pr-2 py-1 d-flex justify-space-between side-list"
+        class="pr-2 d-flex justify-space-between align-center side-list"
       >
         <nuxt-link
           :to="`/channels/${ channel.id }`"
-          class="side-link side_channelcolor--text"
+          class="side-link side_channelcolor--text pl-4 py-1"
         >
           # {{ channel.name }}
         </nuxt-link>

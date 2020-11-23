@@ -1,26 +1,24 @@
 <template>
-  <v-container>
-    <v-row class="message-container">
-      <v-col cols="auto">
+  <v-container class="message-container py-0 px-5">
+    <v-row class="mx-0">
+      <v-col cols="auto pl-0">
         <v-img
           :src="user.userIcon"
-          width="12vw"
-          height="12vw"
-          max-width="50"
-          max-height="50"
-          class="rounded-lg"
+          width="36"
+          height="36"
+          class="rounded"
         >
         </v-img>
       </v-col>
       <v-col class="px-0 pt-2">
-        <div>
-          <p class="font-weight-bold body-1 mb-0">{{ user.displayName }}</p>
+        <div class="body-2">
+          <p class="font-weight-bold mb-0">{{ user.displayName }}</p>
           <div class="accordion__container pa-1" v-if="isContributor">
             <edit-message :message="message" />
             <delete-message :message="message" />
           </div>
         </div>
-        <div class="body-2 message-text">{{ message.text }}</div>
+        <div class="message-text">{{ message.text }}</div>
       </v-col>
     </v-row>
   </v-container>
@@ -74,8 +72,6 @@ export default {
 <style lang="scss" scoped>
 .message-container {
   position: relative;
-  border-radius: 5px;
-  transition: 0.3s;
   &:hover {
     background: #ddd;
     & .accordion__container {
@@ -96,11 +92,11 @@ export default {
     border-radius: 5px;
     opacity: 0;
     visibility: hidden;
-    transition: 0.3s;
   }
 }
 
 .message-text {
+  font-size: 14px;
   white-space: pre-line;
 }
 </style>

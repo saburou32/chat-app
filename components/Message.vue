@@ -73,7 +73,7 @@ export default {
 .message-container {
   position: relative;
   &:hover {
-    background: #ddd;
+    background: #f5f5f5;
     & .accordion__container {
       opacity: 1;
       visibility: visible;

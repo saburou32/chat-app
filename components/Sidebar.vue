@@ -10,7 +10,7 @@
       <li class="side-list">
         <nuxt-link
           to="/"
-          class="pl-4 py-2 side-link side_channelcolor--text"
+          class="pl-4 py-3 side-link side_channelcolor--text"
         >
           Home
         </nuxt-link>
@@ -27,10 +27,7 @@
         </nuxt-link>
         <div class="d-flex">
           <edit-channel :channel="channel" />
-          <delete-channel
-            :channel="channel"
-            class="pl-2"
-          />
+          <delete-channel :channel="channel" />
         </div>
       </li>
     </ul>

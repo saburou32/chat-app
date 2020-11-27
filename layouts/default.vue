@@ -29,6 +29,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ currentChannelName }}</v-toolbar-title>
       <v-spacer></v-spacer>
+      <member-list />
     </v-app-bar>
     <v-main light>
       <nuxt />
@@ -39,6 +40,7 @@
 <script>
 import Sidebar from '~/components/Sidebar.vue'
 import AuthBtn from '~/components/AuthBtn.vue'
+import MemberList from '~/components/MemberList.vue'
 import { db, firebase } from '~/plugins/firebase'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -58,10 +60,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'currentChannelName',
-      'currentChannelMembers'
-    ]),
+    ...mapGetters(['currentChannelName',]),
 
     isChannel() {
       return !!this.$route.params.id

@@ -32,7 +32,13 @@ import DeleteMessage from '~/components/DeleteMessage.vue'
 
 export default {
   props: {
-    message: Object,
+    message: {
+      id: String,
+      text: String,
+      userId: String,
+      createdAt: Number,
+      updatedAt: Number,
+    },
   },
 
   components: {

@@ -92,9 +92,9 @@ import MentionModal from '~/components/MentionModal.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-  props: {
-    channelMembers: Array,
-  },
+  // props: {
+  //   channelMembers: Array,
+  // },
 
   components: {
     MentionModal,
@@ -148,7 +148,7 @@ export default {
       const mentionResult = this.text.match(mentionReg)
       if(!mentionResult) return
       this.mentionUsers.splice(0)
-      this.channelMembers.forEach(member => {
+      this.currentChannelMembers.forEach(member => {
         if(!mentionResult.includes(member.displayName)) return
         this.mentionUsers.push({
           name: member.displayName,
@@ -207,14 +207,14 @@ export default {
       this.candidateUsers.splice(0)
       if(searchStr === '@' || searchStr === '＠') {
         this.openModal = true
-        return this.candidateUsers.push(...this.channelMembers)
+        return this.candidateUsers.push(...this.currentChannelMembers)
       }
 
       //取り出した文字列と合致するユーザーをcandidateUsersに入れる
       const searchStrRemoveAt = searchStr.slice(1)
       const regexp = new RegExp(searchStrRemoveAt + '(.*?)', 'g')
       this.candidateUsers.push(
-        ...this.channelMembers.filter( member => {
+        ...this.currentChannelMembers.filter( member => {
           return member.displayName.match(regexp)
         })
       )
@@ -247,7 +247,7 @@ export default {
       } else {
         this.textareaInsertStr('@')
       }
-      this.candidateUsers.push(...this.channelMembers)
+      this.candidateUsers.push(...this.currentChannelMembers)
       this.$refs.textarea.focus()
       this.openModal = true
     },
@@ -293,6 +293,7 @@ export default {
       'currentUser',
       'currentChannel',
       'currentChannelName',
+      'currentChannelMembers',
     ])
   },
 

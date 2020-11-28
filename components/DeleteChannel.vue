@@ -47,7 +47,14 @@ import { db } from '~/plugins/firebase'
 import { mapGetters } from 'vuex'
 
 export default {
-  props: ['channel'],
+  props: {
+    channel: {
+      name: String,
+      owner: String,
+      createdAt: Number,
+      updatedAt: Number,
+    }
+  },
 
   data: () => ({
     modalVisible: false,

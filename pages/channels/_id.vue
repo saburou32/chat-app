@@ -8,9 +8,7 @@
         <messages :messages="messages" />
       </v-col>
       <v-col class="flex-grow-0 pb-0 px-0">
-        <chat-form
-          :channelMembers="channelMembers"
-        />
+        <chat-form />
       </v-col>
     </v-row>
   </v-container>

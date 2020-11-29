@@ -92,10 +92,6 @@ import MentionModal from '~/components/MentionModal.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-  // props: {
-  //   channelMembers: Array,
-  // },
-
   components: {
     MentionModal,
   },
@@ -288,6 +284,7 @@ export default {
   },
 
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters([
       'isAuthenticated',
       'currentUser',

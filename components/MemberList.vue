@@ -77,6 +77,7 @@ export default {
   }),
 
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters([
       'currentChannelName',
       'currentChannelMembers',

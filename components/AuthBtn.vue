@@ -26,8 +26,9 @@ import { firebase } from '~/plugins/firebase'
 import { mapActions, mapGetters } from 'vuex' 
 export default {
   methods: {
+    // this.$store.dispatchをスプレッド構文で組み込み
     ...mapActions(['setUser']),
-      // ログイン、firebaseの認証
+    // ログイン、firebaseの認証
     login() {
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(provider)
@@ -50,6 +51,7 @@ export default {
   },
   
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters(['isAuthenticated']),
   }
 }

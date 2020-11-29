@@ -33,6 +33,7 @@ export default {
   }),
 
   methods: {
+    // this.$store.dispatchをスプレッド構文で組み込み
     ...mapActions([
       'setChannelId',
       'setChannelName',

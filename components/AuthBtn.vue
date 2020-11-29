@@ -1,7 +1,21 @@
 <template>
   <div>
-    <v-btn outlined v-if="!isAuthenticated" @click="login">ログイン</v-btn>
-    <v-btn outlined v-else @click="logout" to="/" nuxt>
+    <v-btn
+      outlined
+      small
+      v-if="!isAuthenticated"
+      @click="login"
+    >
+      ログイン
+    </v-btn>
+    <v-btn
+      outlined
+      small
+      v-else
+      @click="logout"
+      to="/"
+      nuxt
+    >
       ログアウト
     </v-btn>
   </div>
@@ -12,8 +26,9 @@ import { firebase } from '~/plugins/firebase'
 import { mapActions, mapGetters } from 'vuex' 
 export default {
   methods: {
+    // this.$store.dispatchをスプレッド構文で組み込み
     ...mapActions(['setUser']),
-      // ログイン、firebaseの認証
+    // ログイン、firebaseの認証
     login() {
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(provider)
@@ -36,6 +51,7 @@ export default {
   },
   
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters(['isAuthenticated']),
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="column">
+  <v-container class="column pb-0">
     <v-row>
       <v-col cols="auto" class="pb-0">
         <v-img
@@ -26,7 +26,7 @@
               rows="2"
               auto-grow
               hide-details="false"
-              :placeholder="`#${ channelName } へのメッセージ`"
+              :placeholder="`#${ currentChannelName } へのメッセージ`"
               v-model="text"
               :disabled="isProcessing"
               @click="openModal = false"
@@ -92,11 +92,6 @@ import MentionModal from '~/components/MentionModal.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-  props: {
-    channelName: String,
-    channelMembers: Array,
-  },
-
   components: {
     MentionModal,
   },
@@ -149,7 +144,7 @@ export default {
       const mentionResult = this.text.match(mentionReg)
       if(!mentionResult) return
       this.mentionUsers.splice(0)
-      this.channelMembers.forEach(member => {
+      this.currentChannelMembers.forEach(member => {
         if(!mentionResult.includes(member.displayName)) return
         this.mentionUsers.push({
           name: member.displayName,
@@ -159,7 +154,7 @@ export default {
     },
 
     sendMail() {
-      if(!this.mentionUsers) return
+      if(!this.mentionUsers.length) return
       const mailer = functions.httpsCallable('sendMail')
       const mentionUsersName = []
       this.mentionUsers.forEach(mentionUser => {
@@ -208,14 +203,14 @@ export default {
       this.candidateUsers.splice(0)
       if(searchStr === '@' || searchStr === '＠') {
         this.openModal = true
-        return this.candidateUsers.push(...this.channelMembers)
+        return this.candidateUsers.push(...this.currentChannelMembers)
       }
 
       //取り出した文字列と合致するユーザーをcandidateUsersに入れる
       const searchStrRemoveAt = searchStr.slice(1)
       const regexp = new RegExp(searchStrRemoveAt + '(.*?)', 'g')
       this.candidateUsers.push(
-        ...this.channelMembers.filter( member => {
+        ...this.currentChannelMembers.filter( member => {
           return member.displayName.match(regexp)
         })
       )
@@ -248,7 +243,7 @@ export default {
       } else {
         this.textareaInsertStr('@')
       }
-      this.candidateUsers.push(...this.channelMembers)
+      this.candidateUsers.push(...this.currentChannelMembers)
       this.$refs.textarea.focus()
       this.openModal = true
     },
@@ -289,10 +284,13 @@ export default {
   },
 
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters([
       'isAuthenticated',
       'currentUser',
-      'currentChannel'
+      'currentChannel',
+      'currentChannelName',
+      'currentChannelMembers',
     ])
   },
 
@@ -335,6 +333,7 @@ export default {
 .active {
   &__textarea {
     background: #f8f8f8;
+    border-radius: 0 0 4px 4px;
   }
 }
 </style>

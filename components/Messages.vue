@@ -1,5 +1,5 @@
 <template>
-  <div ref="message">
+  <div>
     <message
       v-for="message in messages"
       :key="message.id"
@@ -18,20 +18,6 @@ export default {
 
   components: {
     Message,
-  },
-
-  methods: {
-    scrollEnd() {
-      this.$nextTick(() => {
-        const messageTarget = this.$refs.message
-        if(!messageTarget) return 
-        messageTarget.scrollIntoView(false)
-      })
-    }
-  },
-
-  updated() {
-    this.scrollEnd()
   },
 }
 </script>

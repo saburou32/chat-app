@@ -1,14 +1,14 @@
 <template>
-  <v-container fluid class="chat-container">
+  <v-container fluid class="chat-container py-0">
     <v-row class="flex-column chat-container">
-      <v-col class="chat-messages">
+      <v-col
+        ref="message"
+        class="chat-messages px-0"
+      >
         <messages :messages="messages" />
       </v-col>
-      <v-col class="flex-grow-0">
-        <chat-form
-          :channelMembers="channelMembers"
-          :channelName="channelName"
-        />
+      <v-col class="flex-grow-0 pb-0 px-0">
+        <chat-form />
       </v-col>
     </v-row>
   </v-container>
@@ -30,11 +30,15 @@ export default {
     messages: [],
     memberList: [],
     channelMembers: [],
-    channelName: '',
   }),
 
   methods: {
-    ...mapActions(['setChannelId']),
+    // this.$store.dispatchをスプレッド構文で組み込み
+    ...mapActions([
+      'setChannelId',
+      'setChannelName',
+      'setChannelMembers',
+    ]),
 
     async memberListQuery() {
       this.channelMembers.splice(0)
@@ -45,10 +49,20 @@ export default {
           this.channelMembers.push({ ...doc.data() })
         })
       }
+      this.setChannelMembers(this.channelMembers)
+    },
+
+    scrollEnd() {
+      this.$nextTick(() => {
+        const messageTarget = this.$refs.message
+        if(!messageTarget) return 
+        messageTarget.scrollTop = messageTarget.scrollHeight
+      })
     }
   },
 
   async mounted() {
+    // マウント時にチャンネル情報をvuexへセット
     this.setChannelId(this.$route.params.id)
     const channelRef = await db.collection('channels').doc(this.$route.params.id)
     channelRef.get()
@@ -57,7 +71,7 @@ export default {
           window.alert('申し訳ありませんが、開こうとしたチャンネルは存在しないようです')
           this.$router.push('/')
         } else {
-          this.channelName = doc.data().name
+          this.setChannelName(doc.data().name)
         }
       })
       .catch((error) => {
@@ -116,8 +130,12 @@ export default {
   watch: {
     memberList: function() {
       this.memberListQuery()
-    }
-  }
+    },
+  },
+
+  updated() {
+    this.scrollEnd()
+  },
 }
 </script>
 
@@ -127,6 +145,6 @@ export default {
 }
 
 .chat-messages {
-  overflow: scroll;
+  overflow-y: scroll;
 }
 </style>

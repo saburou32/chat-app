@@ -1,16 +1,20 @@
 <template>
-<v-list-item-action>
-  <v-btn
-    class="px-0"
-    @click.stop.prevent="modalVisible = true"
-    text
-    small
-    min-width="0"
-    v-if="isOwner"
+  <v-dialog
+    v-model="modalVisible"
+    max-width="800"
   >
-  <v-icon>mdi-pencil</v-icon>
-  </v-btn>
-  <v-dialog v-model="modalVisible" max-width="800">
+    <template v-slot:activator="{ on }">
+      <v-btn
+        text
+        x-small
+        min-width="0"
+        v-if="isOwner"
+        v-on="on"
+        class="px-0"
+      >
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+    </template>
     <v-card>
       <v-card-title class="title">{{ channel.name }}</v-card-title>
       <v-card-subtitle>変更したい名前を入力してください</v-card-subtitle>
@@ -38,7 +42,6 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-</v-list-item-action>
 </template>
 
 <script>
@@ -46,7 +49,14 @@ import { db } from '~/plugins/firebase'
 import { mapGetters } from 'vuex'
 
 export default {
-  props: ['channel'],
+  props: {
+    channel: {
+      name: String,
+      owner: String,
+      createdAt: Number,
+      updatedAt: Number,
+    }
+  },
 
   data: () => ({
     modalVisible: false,
@@ -73,6 +83,7 @@ export default {
   },
 
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters([
       'isAuthenticated',
       'currentUser',

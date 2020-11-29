@@ -23,6 +23,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '@/assets/common.scss'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -54,15 +55,18 @@ export default {
     theme: {
       dark: false,
       themes: {
-        dark: {
+        light: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
+          success: colors.green.accent3,
+          header: '#350d36',
+          sidetheme: '#3f0e40',
+          side_channelcolor: '#cfc2cf',
+        },
       }
     }
   },

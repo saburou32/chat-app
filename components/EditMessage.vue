@@ -1,47 +1,50 @@
 <template>
-  <div>
-    <v-btn
-      x-small
-      text
-      min-width="0"
-      @click="modalVisible = !modalVisible"
-      class="px-1"
-    >
-      <v-icon
-        size="20"
-        color="#555"
+  <v-dialog
+    v-model="modalVisible"
+    max-width="800"
+  >
+    <template v-slot:activator="{ on }">
+      <v-btn
+        x-small
+        text
+        min-width="0"
+        v-on="on"
+        class="px-1"
       >
-        mdi-pencil
-      </v-icon>
-    </v-btn>
-    <v-dialog v-model="modalVisible" max-width="800">
-      <v-card>
-        <v-card-title>メッセージ編集</v-card-title>
-        <v-card-text class="pb-0">
-          <v-form ref="message_form" @submit.prevent>
-            <v-textarea
-              label="Message text"
-              v-model="messageText"
-              :rules="[messageRules]"
-              @keydown.exact.ctrl.enter="editMessage"
-            >
-            </v-textarea>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            class="mr-4"
-            @click="editMessage"
-            text
-            color="primary"
+        <v-icon
+          size="20"
+          color="#555"
+        >
+          mdi-pencil
+        </v-icon>
+      </v-btn>
+    </template>
+    <v-card>
+      <v-card-title>メッセージ編集</v-card-title>
+      <v-card-text class="pb-0">
+        <v-form ref="message_form" @submit.prevent>
+          <v-textarea
+            label="Message text"
+            v-model="messageText"
+            :rules="[messageRules]"
+            @keydown.exact.ctrl.enter="editMessage"
           >
-          change
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+          </v-textarea>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          class="mr-4"
+          @click="editMessage"
+          text
+          color="primary"
+        >
+        change
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -50,7 +53,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   props: {
-    message: Object,
+    message: {
+      id: String,
+      text: String,
+      userId: String,
+      createdAt: Number,
+      updatedAt: Number,
+    },
   },
 
   data: () => ({
@@ -78,6 +87,7 @@ export default {
   },
 
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters([
       'isAuthenticated',
       'currentUser',

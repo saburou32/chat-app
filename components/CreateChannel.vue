@@ -1,38 +1,46 @@
 <template>
-<v-dialog v-model="modalVisible" max-width="800" v-if="isAuthenticated">
-  <template v-slot:activator="{ on }">
-    <v-btn text x-small v-on="on">
-      <v-icon dense>mdi-plus</v-icon>
-    </v-btn>
-  </template>
-  <v-card>
-    <v-card-title class="title">チャンネル作成</v-card-title>
-    <v-card-subtitle>作成したいチャンネルの名前を入力してください</v-card-subtitle>
-    <v-card-text class="pb-0">
-      <v-form ref="channel_form" @submit.prevent>
-        <v-text-field
-          label="Channel name"
-          v-model="channelName"
-          :rules="[channelRules]"
-          @keydown.exact.ctrl.enter="createChannel"
-        >
-        </v-text-field>
-      </v-form>
-    </v-card-text>
-    <v-card-actions>
-      <v-spacer></v-spacer>
+  <v-dialog
+    v-model="modalVisible"
+    max-width="800"
+    v-if="isAuthenticated"
+  >
+    <template v-slot:activator="{ on }">
       <v-btn
-        class="mr-4"
-        @click="createChannel"
         text
-        color="primary"
-        :disabled="isProcessing"
+        x-small
+        v-on="on"
       >
-      creat
+        <v-icon dense>mdi-plus</v-icon>
       </v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
+    </template>
+    <v-card>
+      <v-card-title class="title">チャンネル作成</v-card-title>
+      <v-card-subtitle>作成したいチャンネルの名前を入力してください</v-card-subtitle>
+      <v-card-text class="pb-0">
+        <v-form ref="channel_form" @submit.prevent>
+          <v-text-field
+            label="Channel name"
+            v-model="channelName"
+            :rules="[channelRules]"
+            @keydown.exact.ctrl.enter="createChannel"
+          >
+          </v-text-field>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          class="mr-4"
+          @click="createChannel"
+          text
+          color="primary"
+          :disabled="isProcessing"
+        >
+        creat
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -85,6 +93,7 @@ export default {
   },
 
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters([
       'isAuthenticated',
       'currentUser',

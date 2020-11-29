@@ -1,16 +1,20 @@
 <template>
-<v-list-item-action>
-  <v-btn
-    class="px-0"
-    @click.stop.prevent="modalVisible = true"
-    text
-    small
-    min-width="0"
-    v-if="isOwner"
+  <v-dialog
+    v-model="modalVisible"
+    max-width="520"
   >
-    <v-icon>mdi-delete</v-icon>
-  </v-btn>
-  <v-dialog v-model="modalVisible" max-width="400">
+    <template v-slot:activator="{ on }">
+      <v-btn
+        text
+        x-small
+        min-width="0"
+        v-if="isOwner"
+        v-on="on"
+        class="px-0 ml-2"
+      >
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </template>
     <v-card>
       <v-card-title class="title">{{ channel.name }}を削除</v-card-title>
       <v-card-text class="body-1 red--text pb-0">
@@ -19,16 +23,23 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text color="primary" @click="deleteChannel">
+        <v-btn
+          text
+          color="primary"
+          @click="deleteChannel"
+        >
           YES
         </v-btn>
-        <v-btn text color="primary" @click="modalVisible = false">
+        <v-btn
+          text
+          color="primary"
+          @click="modalVisible = false"
+        >
           NO
         </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
-</v-list-item-action>
 </template>
 
 <script>
@@ -36,7 +47,14 @@ import { db } from '~/plugins/firebase'
 import { mapGetters } from 'vuex'
 
 export default {
-  props: ['channel'],
+  props: {
+    channel: {
+      name: String,
+      owner: String,
+      createdAt: Number,
+      updatedAt: Number,
+    }
+  },
 
   data: () => ({
     modalVisible: false,
@@ -58,6 +76,7 @@ export default {
   },
 
   computed: {
+    // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters([
       'isAuthenticated',
       'currentUser',

@@ -29,3 +29,24 @@
     </v-row>
   </v-container>
 </template>
+
+<script>
+  import { mapActions } from 'vuex'
+
+  export default {
+    methods: {
+      // this.$store.dispatchをスプレッド構文で組み込み
+      ...mapActions([
+        'setChannelId',
+        'setChannelName',
+        'setChannelMembers',
+      ]),
+    },
+
+    mounted() {
+      this.setChannelId(null)
+      this.setChannelName(null)
+      this.setChannelMembers(null)
+    }
+  }
+</script>

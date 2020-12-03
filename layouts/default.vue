@@ -24,7 +24,6 @@
       dense
       height="64px"
       class="bg-white border-bottom"
-      v-if="!!this.currentChannelName"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ currentChannelName }}</v-toolbar-title>

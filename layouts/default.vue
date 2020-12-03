@@ -24,7 +24,7 @@
       dense
       height="64px"
       class="bg-white border-bottom"
-      v-if="isChannel"
+      v-if="!!this.currentChannelName"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ currentChannelName }}</v-toolbar-title>
@@ -63,10 +63,6 @@ export default {
   computed: {
     // this.$store.gettersをスプレッド構文で組み込み
     ...mapGetters(['currentChannelName',]),
-
-    isChannel() {
-      return !!this.$route.params.id
-    },
   },
 
   async mounted() {

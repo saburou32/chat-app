@@ -8,7 +8,8 @@
     "start": "nuxt start",
     "export": "nuxt export",
     "serve": "nuxt serve",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "generate:modern": "nuxt generate --modern"
   },
   "dependencies": {
     "firebase": "^7.17.1",

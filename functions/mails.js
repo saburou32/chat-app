@@ -27,7 +27,7 @@ class SendMentionNotice {
             text-align: center;
           }
           .main {
-            width: 40%;
+            max-width: 300px;
             padding: 0 30px 30px;
             margin: 0 auto;
             border: 1px solid #888;

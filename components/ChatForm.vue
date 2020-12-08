@@ -140,12 +140,18 @@ export default {
     },
 
     mentionToUserReg() {
-      const mentionReg = /(?<=^@|＠|[^\w]@|[^\w]＠)(\S*)/gi
+      this.mentionUsers.splice(0)
+      const mentionReg = /(@|＠)\S*/gi
       const mentionResult = this.text.match(mentionReg)
       if(!mentionResult) return
-      this.mentionUsers.splice(0)
+      const mentionResultDeleteAt = []
+      // メンション配列から「@」を削除
+      mentionResult.forEach(mentionUser =>{
+        mentionResultDeleteAt.push(mentionUser.slice(1))
+      })
+      // チャンネル参加者をforEachで回して、メンションユーザーに該当する物をmentionUsersにPush
       this.currentChannelMembers.forEach(member => {
-        if(!mentionResult.includes(member.displayName)) return
+        if(!mentionResultDeleteAt.includes(member.displayName)) return
         this.mentionUsers.push({
           name: member.displayName,
           email: member.email,
@@ -196,7 +202,7 @@ export default {
       if(!beforeStr.length) return
 
       // カーソル位置に一番近いメンション文字列を取り出す
-      const mentionReg = /(?<=^|[^\w])(@|＠)(\S*)/gi
+      const mentionReg = /(@|＠)\S*/gi
       const mentionArray = beforeStr.match(mentionReg)
       if(!mentionArray) return
       const searchStr = mentionArray.pop()
@@ -252,9 +258,10 @@ export default {
       const [textarea, pos] = this.getCaretPosition()
       const [len, before, after] = this.getCaretStr(pos)
 
-      const mentionReg = /(?<=^|[^\w])(@|＠)(\S*)/gi
+      const mentionReg = /(@|＠)\S*/gi
       const beforeMentionArray = before.match(mentionReg)
       if(!beforeMentionArray) return
+      // カーソルから最も近いメンションユーザー取得
       const searchStr = beforeMentionArray.pop()
       if(searchStr == '@' || searchStr == '＠') {
         this.textareaInsertStr(name + ' ')

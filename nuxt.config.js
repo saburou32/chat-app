@@ -74,5 +74,7 @@ export default {
   ** Build configuration
   */
   build: {
-  }
+  },
+
+  modern: 'client',
 }

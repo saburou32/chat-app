@@ -1,13 +1,15 @@
 <template>
-  <v-container fluid class="chat-container py-0">
-    <v-row class="flex-column chat-container">
-      <v-col
-        ref="message"
-        class="chat-messages px-0"
-      >
+  <v-container fluid class="channel-container py-0">
+    <v-row
+      ref="message"
+      class="chat-messages chat-flex-basis"
+    >
+      <v-col class="px-0">
         <messages :messages="messages" />
       </v-col>
-      <v-col class="flex-grow-0 pb-0 px-0">
+    </v-row>
+    <v-row class="chat-flex-basis flex-grow-0">
+      <v-col class="pb-0 px-0">
         <chat-form />
       </v-col>
     </v-row>
@@ -140,8 +142,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.chat-container {
+.channel-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  flex: 1 1 auto;
   height: 100%;
+}
+
+.chat-flex-basis {
+  flex-basis: 0;
 }
 
 .chat-messages {

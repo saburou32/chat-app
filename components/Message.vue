@@ -1,7 +1,7 @@
 <template>
   <v-container class="message-container py-0 px-5">
     <v-row class="mx-0">
-      <v-col cols="auto pl-0">
+      <v-col cols="auto">
         <v-img
           :src="user.userIcon"
           width="36"
@@ -49,7 +49,7 @@ export default {
   data: () => ({
     user: {
       id: '',
-      displayName: '',
+      displayName: '?',
       userIcom: '',
     },
   }),
